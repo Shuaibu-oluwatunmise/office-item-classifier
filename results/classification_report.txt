@@ -1,0 +1,25 @@
+OFFICE ITEM CLASSIFICATION - TEST SET EVALUATION
+============================================================
+
+Overall Accuracy: 0.9637
+Macro F1-Score: 0.9528
+
+Per-Class Performance:
+------------------------------------------------------------
+                precision    recall  f1-score   support
+
+computer_mouse     0.9451    0.7818    0.8557       110
+      keyboard     0.9835    0.9675    0.9754       123
+        laptop     0.9640    0.9185    0.9407       233
+  mobile_phone     0.9011    0.9442    0.9222       251
+           mug     0.8770    0.8917    0.8843       120
+      notebook     0.9881    0.9881    0.9881       420
+    office_bin     0.9872    0.9936    0.9904       467
+  office_chair     0.9906    0.9953    0.9929       212
+           pen     0.9857    1.0000    0.9928       138
+       stapler     0.9224    0.9902    0.9551       204
+  water_bottle     0.9900    0.9755    0.9827       204
+
+      accuracy                         0.9637      2482
+     macro avg     0.9577    0.9497    0.9528      2482
+  weighted avg     0.9642    0.9637    0.9634      2482

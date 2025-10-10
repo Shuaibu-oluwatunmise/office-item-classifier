@@ -1,0 +1,12 @@
+,computer_mouse,keyboard,laptop,mobile_phone,mug,notebook,office_bin,office_chair,pen,stapler,water_bottle
+computer_mouse,86,0,0,7,6,0,0,0,0,11,0
+keyboard,1,119,1,1,1,0,0,0,0,0,0
+laptop,3,0,214,6,0,3,3,2,0,1,1
+mobile_phone,0,0,4,237,4,1,2,0,0,3,0
+mug,1,0,1,6,107,1,1,0,1,2,0
+notebook,0,1,1,2,1,415,0,0,0,0,0
+office_bin,0,0,0,1,2,0,464,0,0,0,0
+office_chair,0,0,0,0,0,0,0,211,1,0,0
+pen,0,0,0,0,0,0,0,0,138,0,0
+stapler,0,0,0,1,0,0,0,0,0,202,1
+water_bottle,0,1,1,2,1,0,0,0,0,0,199
