@@ -7,46 +7,74 @@
 
 ## Project Overview
 
-An image classification system that recognizes common office items from single images or live camera feed. This project uses deep learning (PyTorch with transfer learning) to classify 10 different office object categories.
+An image classification system that recognizes common office items from single images or live camera feed. This project uses deep learning (PyTorch with ResNet18 transfer learning) to classify 11 office object categories with **97.45% validation accuracy**.
 
-## Classes to Recognize
+## 🎯 Training Results
 
-1. Mug
-2. Water Bottle
-3. Mobile Phone
-4. Keyboard
-5. Computer Mouse
-6. Stapler
-7. Pen/Pencil
-8. Notebook
-9. Office Chair
-10. Office Bin
+**Model Performance:**
+- ✅ **Best Validation Accuracy:** 97.45% (Epoch 22) 🏆
+- ✅ **Final Validation Accuracy:** 95.99% (Epoch 25)
+- ✅ **Training Accuracy:** 97.50%
+- ✅ **Minimal Overfitting:** Only 0.05% gap between train and validation
+
+**Training Details:**
+- **Duration:** 10 hours 48 minutes (648 minutes)
+- **Hardware:** Intel Core i7-1255U (CPU), 16GB RAM, Intel Iris Xe Graphics
+- **Model:** ResNet18 (pretrained on ImageNet, fine-tuned)
+- **Optimizer:** Adam (Learning Rate: 0.001)
+- **Batch Size:** 32
+- **Epochs:** 25
+
+**Dataset:**
+- **Total Images:** 13,616
+- **Training:** 10,005 images (70%)
+- **Validation:** 2,473 images (15%)
+- **Testing:** ~2,043 images (15%)
+- **Classes:** 11
+
+## Classes Recognized
+
+1. Computer Mouse
+2. Keyboard
+3. Laptop
+4. Mobile Phone
+5. Mug
+6. Notebook
+7. Office Bin
+8. Office Chair
+9. Pen
+10. Stapler
+11. Water Bottle
 
 ## Project Structure
 
 ```
 office-item-classifier/
 ├── data/
-│   ├── raw/                # Original downloaded images
-│   ├── processed/          # Organized train/val/test splits
-│   └── dataset_card.md     # Dataset documentation
+│   ├── raw/                    # Original images (not in Git - 13,616 images)
+│   ├── processed/              # Train/val/test splits (not in Git)
+│   ├── dataset_card.md         # Complete dataset documentation
+│   └── DATA_SOURCES.md         # Full attribution
 ├── src/
-│   └── (classification code will go here)
+│   ├── train.py                # Training pipeline (ResNet18)
+│   ├── organize_dataset.py     # Dataset splitting script
+│   ├── evaluate.py             # [IN PROGRESS] Test set evaluation
+│   ├── inference.py            # [TODO] Single image classification
+│   └── camera_inference.py     # [TODO] Live camera feed
 ├── models/
-│   └── (trained models will be saved here)
-├── notebooks/
-│   └── (exploration and training notebooks)
+│   ├── best_model.pth          # Best model (97.45% val acc)
+│   ├── final_model.pth         # Final epoch model
+│   └── training_history.json   # All training metrics
 ├── results/
-│   └── (confusion matrices, metrics, etc.)
-├── requirements.txt
-└── README.md
+│   └── (evaluation results will go here)
+└── requirements.txt
 ```
 
 ## Installation
 
 ```bash
 # Clone the repository
-git clone <repository-url>
+git clone https://github.com/Shuaibu-oluwatunmise/office-item-classifier
 cd office-item-classifier
 
 # Install dependencies
@@ -55,21 +83,100 @@ pip install -r requirements.txt
 
 ## Usage
 
-*Coming soon - code under development*
+### Training (Already Complete ✅)
 
-## Development Stages
+```bash
+python src/train.py
+```
+
+**Output:**
+- `models/best_model.pth` - Best validation accuracy model
+- `models/final_model.pth` - Final epoch model
+- `models/training_history.json` - Training metrics
+
+### Evaluation (Next Step)
+
+```bash
+python src/evaluate.py
+```
+
+**Will generate:**
+- Test accuracy, macro F1-score
+- Confusion matrix
+- Per-class performance metrics
+
+### Inference (Coming Soon)
+
+```bash
+# Single image
+python src/inference.py path/to/image.jpg
+
+# Live camera feed
+python src/camera_inference.py
+```
+
+## Dataset
+
+**Source:** Roboflow Universe (11 different projects)  
+**Total Images:** 13,616 across 11 balanced classes  
+**Format:** JPEG/PNG, resized to 224×224 for training  
+
+**Data Augmentation:**
+- Random crop (224×224)
+- Random horizontal flip
+- Color jitter (brightness, contrast, saturation)
+- Random rotation (±15°)
+- ImageNet normalization
+
+**Note:** Dataset images are excluded from Git (too large). See `data/dataset_card.md` for complete documentation and sources.
+
+## Model Architecture
+
+**Base Model:** ResNet18 (pretrained on ImageNet)  
+**Modifications:**
+- Replaced final fully connected layer for 11 classes
+- Fine-tuned all layers (not frozen)
+- Cross-entropy loss
+- Adam optimizer
+
+**Why ResNet18?**
+- Proven architecture for image classification
+- Lightweight (44.8 MB) - suitable for deployment
+- Pretrained weights provide strong feature extraction
+- Fast training even on CPU
+
+## Development Progress
 
 - [x] Project structure setup
-- [ ] Dataset collection and organization
-- [ ] Data preprocessing and augmentation
-- [ ] Model selection and training
-- [ ] Evaluation and testing
-- [ ] Inference script (file and camera input)
+- [x] Dataset collection (13,616 images from Roboflow)
+- [x] Dataset organization (70/15/15 split)
+- [x] Data preprocessing and augmentation
+- [x] Model training (97.45% validation accuracy)
+- [ ] Test set evaluation
+- [ ] Inference scripts (file and camera)
+- [ ] Error analysis
 - [ ] Documentation and video walkthrough
 
 ## Requirements
 
-See `requirements.txt` for full dependencies.
+**Key Dependencies:**
+- Python 3.8+
+- PyTorch 2.0+
+- torchvision
+- OpenCV (for camera inference)
+- scikit-learn
+- matplotlib
+- tqdm
+
+See `requirements.txt` for complete list.
+
+## Next Steps
+
+1. Evaluate model on test set
+2. Generate confusion matrix and metrics
+3. Implement inference scripts
+4. Analyze common classification errors
+5. Create code walkthrough video
 
 ## License
 
@@ -77,5 +184,11 @@ MIT License - Academic Project
 
 ## Acknowledgments
 
-- Middlesex University London
-- PDE3802 Module Team
+- **Middlesex University London** - PDE3802 Module
+- **Roboflow Universe** - Dataset sources (see DATA_SOURCES.md)
+- **PyTorch** - Deep learning framework
+
+---
+
+*Last Updated: October 10, 2025*  
+*Training completed with 97.45% validation accuracy*
