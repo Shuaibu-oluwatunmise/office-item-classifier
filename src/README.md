@@ -97,45 +97,78 @@ python src/evaluate.py
 
 ---
 
-## Future Scripts (To Be Implemented)
-
-### `inference.py` 🚧
-**Status:** To be created  
+### `inference.py` ✅
+**Status:** Complete  
 **Purpose:** Run inference on single image files.
 
-**Planned Usage:**
+**Usage:**
 ```bash
 python src/inference.py path/to/image.jpg
 ```
 
-**Expected Output:**
+**Output Example:**
 ```
-Predicted: mug
-Confidence: 0.9523 (95.23%)
+============================================================
+OFFICE ITEM CLASSIFICATION - PREDICTION
+============================================================
+Image: data/processed/test/mug/image.jpg
+------------------------------------------------------------
+
+🎯 Predicted Class: Mug
+📊 Confidence: 100.00%
+
+------------------------------------------------------------
+Top 3 Predictions:
+------------------------------------------------------------
+1. Mug                  ████████████████████████████ 100.00%
+2. Water Bottle         ███░░░░░░░░░░░░░░░░░░░░░░░░   0.00%
+3. Mobile Phone         ░░░░░░░░░░░░░░░░░░░░░░░░░░░   0.00%
+============================================================
 ```
 
 **Features:**
-- Load best trained model
-- Preprocess input image
-- Return predicted class and confidence
-- Handle various image formats (JPEG, PNG)
+- Loads best trained model (96.37% test accuracy)
+- Preprocesses input image (resize, normalize)
+- Returns predicted class with confidence
+- Shows top 3 predictions with visual bars
+- Handles JPEG and PNG formats
+- Confidence warnings for ambiguous predictions
+
+**Test Results:**
+- Mug: 100% confidence ✓
+- Laptop: 100% confidence ✓
+- Computer Mouse: 99.68% confidence ✓
 
 ---
 
-### `camera_inference.py` 🚧
-**Status:** To be created  
+### `camera_inference.py` ✅
+**Status:** Complete  
 **Purpose:** Real-time classification from webcam feed.
 
-**Planned Usage:**
+**Usage:**
 ```bash
 python src/camera_inference.py
 ```
 
 **Features:**
-- Live video capture
-- Real-time prediction overlay
-- Display confidence scores
-- Press 'q' to quit
+- Live video capture from webcam
+- Real-time prediction overlay (simplified display)
+- Shows main prediction and confidence bar
+- FPS counter
+- Save screenshots with 's' key
+- Quit with 'q' key
+- Helpful tip: "Hold object close with plain background"
+
+**Controls:**
+- **'q'** - Quit application
+- **'s'** - Save screenshot
+
+**Performance:**
+- ~15-20 FPS on CPU (Intel i7-1255U)
+- Best results with isolated objects on plain backgrounds
+- Works better with good lighting conditions
+
+**Note:** Laptop webcam quality and complex backgrounds may affect accuracy. For best results, use with clearly visible office items against plain backgrounds.
 
 ---
 

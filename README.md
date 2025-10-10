@@ -170,8 +170,10 @@ python src/camera_inference.py
 - [x] Model training (97.45% validation accuracy)
 - [x] Test set evaluation (96.37% accuracy, 0.9528 macro F1)
 - [x] Error analysis and confusion matrix
-- [ ] Inference scripts (file and camera)
-- [ ] Documentation and video walkthrough
+- [x] Inference scripts - file input (100% confidence on test cases)
+- [x] Inference scripts - live camera (works best with plain backgrounds)
+- [ ] Code walkthrough video (2 minutes)
+- [ ] System overview video (3 minutes)
 
 ## Requirements
 
