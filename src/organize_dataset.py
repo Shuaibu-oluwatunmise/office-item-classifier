@@ -20,10 +20,11 @@ CLASSES = [
     'keyboard',
     'computer_mouse',
     'stapler',
-    'pen_pencil',
+    'pen',
     'notebook',
     'office_chair',
-    'office_bin'
+    'office_bin',
+    'laptop'
 ]
 
 # Define paths
