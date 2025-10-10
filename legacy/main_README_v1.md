@@ -58,15 +58,19 @@ office-item-classifier/
 ├── src/
 │   ├── train.py                # Training pipeline (ResNet18)
 │   ├── organize_dataset.py     # Dataset splitting script
-│   ├── evaluate.py             # [IN PROGRESS] Test set evaluation
-│   ├── inference.py            # [TODO] Single image classification
-│   └── camera_inference.py     # [TODO] Live camera feed
+│   ├── evaluate.py             # Test set evaluation
+│   ├── inference.py            # Single image classification
+│   └── camera_inference.py     # Live camera feed
 ├── models/
 │   ├── best_model.pth          # Best model (97.45% val acc)
 │   ├── final_model.pth         # Final epoch model
 │   └── training_history.json   # All training metrics
 ├── results/
-│   └── (evaluation results will go here)
+│   ├── classification_report.txt
+│   ├── confusion_matrix.csv
+│   ├── confusion_matrix.png
+│   ├── per_class_metrics.csv
+│   └── test_metrics.json
 └── requirements.txt
 ```
 
@@ -172,8 +176,6 @@ python src/camera_inference.py
 - [x] Error analysis and confusion matrix
 - [x] Inference scripts - file input (100% confidence on test cases)
 - [x] Inference scripts - live camera (works best with plain backgrounds)
-- [ ] Code walkthrough video (2 minutes)
-- [ ] System overview video (3 minutes)
 
 ## Requirements
 
