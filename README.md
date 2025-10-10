@@ -145,6 +145,22 @@ python src/camera_inference.py
 - Pretrained weights provide strong feature extraction
 - Fast training even on CPU
 
+## Test Results Summary
+
+**Performance Metrics:**
+- **Test Accuracy:** 96.37% (2,482 test images)
+- **Macro F1-Score:** 0.9528
+- **Best Performing Class:** Office Chair (99.29% F1)
+- **Most Challenging Class:** Computer Mouse (85.57% F1)
+
+**Key Findings:**
+- Minimal overfitting: Only 1.08% gap between validation (97.45%) and test (96.37%)
+- 8 out of 11 classes achieve >95% F1-score
+- Main confusion: Computer mouse → stapler (10% of mice)
+- Root cause: Similar compact handheld form factors and ergonomic shapes
+
+**Detailed Analysis:** See `docs/ERROR_ANALYSIS.md` for comprehensive error analysis, confusion patterns, and improvement recommendations.
+
 ## Development Progress
 
 - [x] Project structure setup
@@ -152,9 +168,9 @@ python src/camera_inference.py
 - [x] Dataset organization (70/15/15 split)
 - [x] Data preprocessing and augmentation
 - [x] Model training (97.45% validation accuracy)
-- [ ] Test set evaluation
+- [x] Test set evaluation (96.37% accuracy, 0.9528 macro F1)
+- [x] Error analysis and confusion matrix
 - [ ] Inference scripts (file and camera)
-- [ ] Error analysis
 - [ ] Documentation and video walkthrough
 
 ## Requirements
