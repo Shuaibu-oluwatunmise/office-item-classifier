@@ -1,0 +1,18 @@
+# yolo_data.yaml //change these to the paths on your systems
+train: C:\Users\shuai\office-item-classifier\data\processed\train
+val: C:\Users\shuai\office-item-classifier\data\processed\val
+test: C:\Users\shuai\office-item-classifier\data\processed\test 
+
+# Class names
+names:
+  0: computer_mouse
+  1: keyboard
+  2: laptop
+  3: mobile_phone
+  4: mug
+  5: notebook
+  6: office_bin
+  7: office_chair
+  8: pen
+  9: stapler
+  10: water_bottle
