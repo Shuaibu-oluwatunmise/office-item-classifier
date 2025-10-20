@@ -16,8 +16,8 @@ DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Class names (must match training order)
 CLASS_NAMES = [
-    'computer_mouse', 'keyboard', 'laptop', 'mobile_phone', 'mug',
-    'notebook', 'office_bin', 'office_chair', 'pen', 'stapler', 'water_bottle'
+    'computer_mouse', 'keyboard', 'laptop', 'mobile_phone', 'monitor',
+    'notebook', 'office_chair', 'pen', 'water_bottle'
 ]
 
 def get_transform():
@@ -115,7 +115,7 @@ def main():
     if len(sys.argv) != 2:
         print("Usage: python src/inference.py <path_to_image>")
         print("\nExample:")
-        print("  python src/inference.py data/processed/test/mug/image.jpg")
+        print("  python src/inference.py data/processed/test/monitor/image.jpg")
         print("  python src/inference.py my_office_photo.jpg")
         sys.exit(1)
     

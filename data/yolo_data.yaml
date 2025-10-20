@@ -9,10 +9,8 @@ names:
   1: keyboard
   2: laptop
   3: mobile_phone
-  4: mug
+  4: monitor
   5: notebook
-  6: office_bin
-  7: office_chair
-  8: pen
-  9: stapler
-  10: water_bottle
+  6: office_chair
+  7: pen
+  8: water_bottle

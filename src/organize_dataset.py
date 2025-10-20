@@ -14,16 +14,14 @@ random.seed(42)
 
 # Define class names
 CLASSES = [
-    'mug',
+    'monitor',
     'water_bottle',
     'mobile_phone',
     'keyboard',
     'computer_mouse',
-    'stapler',
     'pen',
     'notebook',
     'office_chair',
-    'office_bin',
     'laptop'
 ]
 

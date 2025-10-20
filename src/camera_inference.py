@@ -18,8 +18,8 @@ CAMERA_INDEX = 0  # Change to 1 or 2 if default camera doesn't work
 
 # Class names (must match training order)
 CLASS_NAMES = [
-    'computer_mouse', 'keyboard', 'laptop', 'mobile_phone', 'mug',
-    'notebook', 'office_bin', 'office_chair', 'pen', 'stapler', 'water_bottle'
+    'computer_mouse', 'keyboard', 'laptop', 'mobile_phone', 'monitor',
+    'notebook', 'office_chair', 'pen', 'water_bottle'
 ]
 
 def get_transform():
