@@ -1,13 +1,14 @@
 """
 Train Multiple YOLO Models for Office Item Classification
 Trains YOLOv8n, YOLOv8s, and YOLOv11 for systematic comparison
+Automatically skips models that are already trained
 """
 from ultralytics import YOLO
-import os
+from pathlib import Path
 
-ROOT_DIR = r"C:\Users\shuai\office-item-classifier"
-# Point to the processed data directory for classification
-DATA_DIR = os.path.join(ROOT_DIR, "data", "processed")
+# Get the absolute path to the project root
+ROOT_DIR = Path(__file__).parent.parent.absolute()
+DATA_DIR = ROOT_DIR / "data" / "processed"
 
 # Define models to train
 MODELS = {
@@ -17,7 +18,21 @@ MODELS = {
     "yolov11s-cls": "yolo11s-cls.pt", # Latest small
 }
 
+trained_count = 0
+skipped_count = 0
+
 for model_name, pretrained_weights in MODELS.items():
+    # Check if model already trained
+    model_path = ROOT_DIR / "runs" / "classify" / f"{model_name}_train" / "weights" / "best.pt"
+    
+    if model_path.exists():
+        print(f"\n{'='*60}")
+        print(f"✅ SKIPPING {model_name} - Already trained!")
+        print(f"Model found at: {model_path}")
+        print(f"{'='*60}\n")
+        skipped_count += 1
+        continue
+    
     print(f"\n{'='*60}")
     print(f"Training {model_name}")
     print(f"{'='*60}\n")
@@ -27,19 +42,27 @@ for model_name, pretrained_weights in MODELS.items():
     
     # Train
     model.train(
-        data=DATA_DIR,
+        data=str(DATA_DIR),
         epochs=25,
         imgsz=224,
         batch=32,
         device="cpu",
-        workers=0,
-        project=os.path.join(ROOT_DIR, "runs", "classify"),
+        workers=16, #adjust to your CPU capacities
+        project=str(ROOT_DIR / "runs" / "classify"),
         name=f"{model_name}_train"
     )
     
+    trained_count += 1
     print(f"\n{model_name} training complete!")
     print(f"Results saved to: runs/classify/{model_name}_train/\n")
 
 print("\n" + "="*60)
-print("ALL MODELS TRAINED SUCCESSFULLY!")
+print("TRAINING SUMMARY")
+print("="*60)
+print(f"Models trained: {trained_count}")
+print(f"Models skipped: {skipped_count}")
+if trained_count > 0:
+    print("ALL NEW MODELS TRAINED SUCCESSFULLY!")
+else:
+    print("All models were already trained!")
 print("="*60)
