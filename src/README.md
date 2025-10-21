@@ -1,9 +1,9 @@
 # Source Scripts Documentation
 
 **Version:** 2.0  
-**Status:** Retraining with improved dataset and dual architecture approach
+**Status:** ResNet18 complete (99.85% test accuracy), YOLO training in progress
 
-This directory contains all Python scripts for the office item classification pipeline. Version 2.0 implements both ResNet18 and YOLOv8-cls for systematic architecture comparison.
+This directory contains all Python scripts for the office item classification pipeline. Version 2.0 implements ResNet18 and 4 YOLO variants (v8n, v8s, v11n, v11s) for systematic architecture comparison.
 
 ---
 
@@ -24,14 +24,14 @@ python src/organize_dataset.py
 ```
 
 **Outputs:**
-- `data/processed/train/` - Training images (70%)
-- `data/processed/val/` - Validation images (15%)
-- `data/processed/test/` - Test images (15%)
+- `data/processed/train/` - Training images (15,750 = 70%)
+- `data/processed/val/` - Validation images (3,375 = 15%)
+- `data/processed/test/` - Test images (3,375 = 15%)
 
-**Technical Details:**
-- Preserves class distribution across all splits
-- Handles multiple image formats (JPEG, PNG)
-- Prints statistics for verification
+**Dataset Stats:**
+- Total: 22,500 images (2,500 per class)
+- 9 classes perfectly balanced
+- Stratified split maintains proportions
 
 ---
 
@@ -40,11 +40,13 @@ python src/organize_dataset.py
 ### `train.py` (ResNet18)
 **Purpose:** Trains ResNet18 model with transfer learning.
 
+**Status:** ✅ **COMPLETE - 99.85% Test Accuracy**
+
 **Functionality:**
 - Loads pretrained ResNet18 from ImageNet
-- Replaces final fully connected layer for 11 classes
+- Replaces final fully connected layer for 9 classes
 - Fine-tunes all layers (not frozen)
-- Applies comprehensive data augmentation:
+- Comprehensive data augmentation:
   - Random crop (224×224)
   - Random horizontal flip
   - Color jitter (brightness, contrast, saturation ±20%)
@@ -62,7 +64,14 @@ python src/train.py
 - Optimizer: Adam (LR=0.001)
 - Batch size: 32
 - Epochs: 25
-- Device: Automatic (CUDA if available, else CPU)
+- Device: CPU (auto-detects CUDA if available)
+- Workers: 16 (optimized for 20-core CPU)
+
+**Training Performance:**
+- Time: 115 minutes (20-core Intel Core Ultra 7 265K)
+- Validation Accuracy: 99.88%
+- Test Accuracy: **99.85%**
+- 6 classes with perfect 100% F1-score
 
 **Outputs:**
 - `models/best_model.pth` - Model with highest validation accuracy
@@ -71,12 +80,20 @@ python src/train.py
 
 ---
 
-### `train_yolo_cls.py` (YOLOv8)
-**Purpose:** Trains YOLOv8 nano classification model.
+### `train_yolo_cls.py` (YOLO Models)
+**Purpose:** Trains multiple YOLO classification models with smart skip logic.
+
+**Status:** 🔄 **IN PROGRESS**
+- ✅ YOLOv8n-cls: Complete (99.9% validation)
+- 🔄 YOLOv8s-cls: Queued
+- 🔄 YOLOv11n-cls: Queued
+- 🔄 YOLOv11s-cls: Queued
 
 **Functionality:**
-- Loads pretrained YOLOv8n-cls from Ultralytics
-- Trains on organized dataset using YAML configuration
+- Trains 4 YOLO variants: YOLOv8n, YOLOv8s, YOLOv11n, YOLOv11s
+- **Smart Skip Logic:** Automatically skips already-trained models
+- Loads pretrained weights from Ultralytics
+- Trains on organized dataset (directory-based, no YAML needed)
 - Automatic data augmentation from YOLO framework
 - Saves best model based on validation accuracy
 - Generates training curves and metrics automatically
@@ -87,16 +104,28 @@ python src/train_yolo_cls.py
 ```
 
 **Configuration:**
-- Model: YOLOv8n-cls (nano - smallest, fastest)
+- Models: 4 variants (nano and small for v8 and v11)
 - Batch size: 32
 - Epochs: 25
 - Image size: 224×224
-- Device: CPU (configurable)
+- Device: CPU
+- Workers: 16
 
-**Outputs:**
-- `runs/classify/yolo_cls_train/weights/best.pt` - Best model
-- `runs/classify/yolo_cls_train/weights/last.pt` - Last epoch
-- Training curves, confusion matrix, and metrics in `runs/` folder
+**Smart Features:**
+- Checks for existing `best.pt` before training
+- Skips completed models automatically
+- Prints skip confirmation with model path
+- Shows training summary (trained vs skipped counts)
+
+**Outputs (per model):**
+- `runs/classify/{model_name}_train/weights/best.pt` - Best model
+- `runs/classify/{model_name}_train/weights/last.pt` - Last epoch
+- Training curves, confusion matrix, results in `runs/` folder
+
+**YOLOv8n Results:**
+- Validation Accuracy: 99.9%
+- Training Time: ~150 minutes
+- Model Size: ~12 MB
 
 ---
 
@@ -105,9 +134,11 @@ python src/train_yolo_cls.py
 ### `evaluate.py` (ResNet Evaluation)
 **Purpose:** Evaluates trained ResNet18 model on test set.
 
+**Status:** ✅ **COMPLETE**
+
 **Functionality:**
 - Loads best ResNet model from `models/best_model.pth`
-- Runs inference on entire test set
+- Runs inference on entire test set (3,375 images)
 - Calculates comprehensive metrics:
   - Overall accuracy
   - Macro F1-score (average across all classes)
@@ -123,9 +154,15 @@ python src/train_yolo_cls.py
 python src/evaluate.py
 ```
 
+**Results Achieved:**
+- Test Accuracy: **99.85%**
+- Macro F1-Score: **0.9985**
+- Perfect Classes (100% F1): 6 out of 9
+- Worst Class: Laptop (99.60% - still excellent!)
+
 **Outputs:**
 - `results/test_metrics.json` - All metrics in JSON format
-- `results/confusion_matrix.png` - Visual confusion matrix
+- `results/confusion_matrix.png` - Visual confusion matrix (12×10 figure)
 - `results/classification_report.txt` - Detailed text report
 - `results/per_class_metrics.csv` - Spreadsheet-format metrics
 - `results/confusion_matrix.csv` - Raw confusion data
@@ -133,23 +170,74 @@ python src/evaluate.py
 ---
 
 ### `evaluate_yolo_cls.py` (YOLO Evaluation)
-**Purpose:** Evaluates trained YOLOv8-cls model on test set.
+**Purpose:** Evaluates multiple trained YOLO models on test set.
+
+**Status:** 📅 **READY** (run after all YOLO models trained)
 
 **Functionality:**
-- Loads best YOLO model from `runs/classify/yolo_cls_train/weights/best.pt`
+- Loads all available YOLO models from `runs/classify/` folders
+- Skips models that don't exist yet (graceful handling)
 - Runs validation on test directory
-- Calculates Top-1 and Top-5 accuracy
+- Calculates Top-1 and Top-5 accuracy for each model
+- Creates comparison summary across all models
 - Saves metrics to `results/yolo/` folder
-- Note: YOLO generates confusion matrix automatically during training
 
 **Usage:**
 ```bash
 python src/evaluate_yolo_cls.py
 ```
 
+**Features:**
+- Evaluates: YOLOv8n, YOLOv8s, YOLOv11n, YOLOv11s
+- Comparison table with all models
+- JSON export for further analysis
+- Individual confusion matrices in training folders
+
 **Outputs:**
-- `results/yolo/yolo_test_metrics.txt` - Test accuracy metrics
-- Confusion matrix available in `runs/classify/yolo_cls_train/`
+- `results/yolo/yolo_comparison.json` - All model metrics
+- Comparison table printed to console
+- Individual results available in `runs/classify/{model}_train/`
+
+---
+
+### `model_competition.py` 🏆 **NEW!**
+**Purpose:** Ultimate showdown - compares all 5 models on excesses dataset.
+
+**Status:** 📅 **READY** (run after all models trained)
+
+**Functionality:**
+- Tests ResNet18 + 4 YOLO models on same dataset
+- Uses `excesses/` folder (~11K additional images)
+- Comprehensive metrics for each model:
+  - Overall accuracy
+  - Per-class accuracy heatmap
+  - Average confidence scores
+  - Correct vs incorrect prediction confidence
+- Creates championship visualizations:
+  - Accuracy bar chart with rankings
+  - Confidence comparison
+  - Per-class performance heatmap
+  - Correct/incorrect confidence analysis
+- Generates detailed leaderboard with rankings (🥇🥈🥉)
+- Crowns the champion model!
+
+**Usage:**
+```bash
+python src/model_competition.py
+```
+
+**Features:**
+- Tests all 5 models on identical unseen data
+- Head-to-head comparison
+- Visual competition dashboard (4-panel chart)
+- Leaderboard CSV export
+- Detailed championship report
+
+**Outputs:**
+- `results/competition/model_competition_results.png` - 4-panel visualization
+- `results/competition/leaderboard.csv` - Rankings table
+- `results/competition/competition_report.txt` - Championship summary
+- `results/competition/detailed_results.json` - Raw metrics
 
 ---
 
@@ -160,7 +248,7 @@ python src/evaluate_yolo_cls.py
 
 **Functionality:**
 - Accepts image file path as command-line argument
-- Loads best ResNet model
+- Loads best ResNet model (99.85% accuracy)
 - Preprocesses image (resize, normalize)
 - Returns predicted class with confidence score
 - Shows top 3 predictions with visual progress bars
@@ -173,16 +261,18 @@ python src/inference.py path/to/image.jpg
 
 **Example Output:**
 ```
-🎯 Predicted Class: Mug
-📊 Confidence: 98.45%
+🎯 Predicted Class: Monitor
+📊 Confidence: 99.87%
 
 Top 3 Predictions:
-1. Mug                  ████████████████████  98.45%
-2. Water Bottle         ███░░░░░░░░░░░░░░░░░   1.23%
-3. Mobile Phone         ░░░░░░░░░░░░░░░░░░░░   0.32%
+1. Monitor              ████████████████████  99.87%
+2. Laptop               █░░░░░░░░░░░░░░░░░░░   0.08%
+3. Mobile Phone         ░░░░░░░░░░░░░░░░░░░░   0.03%
 ```
 
-**Supported Formats:** JPEG, PNG
+**Supported Formats:** JPEG, PNG, BMP
+
+**Performance:** ~100-150ms per image on CPU
 
 ---
 
@@ -207,34 +297,34 @@ python src/camera_inference.py
 
 **Controls:**
 - **'q'** - Quit application
-- **'s'** - Save screenshot
+- **'s'** - Save screenshot with timestamp
 
 **Performance:**
-- ~15-20 FPS on CPU (Intel i7-1255U)
-- Best results with isolated objects on plain backgrounds
+- ~8-12 FPS on laptop CPU (Intel i7-1255U)
+- ~15-20 FPS on desktop CPU (Intel Core Ultra 7 265K)
+- Best results with isolated objects
 - Good lighting improves accuracy
 
 **Tips:**
-- Hold objects close to camera
-- Use plain backgrounds for best results
+- Hold objects close to camera for best results
+- Use plain backgrounds when possible
 - Ensure good lighting conditions
+- Model performs best on objects similar to training data
 
 ---
 
 ## Archive Folder
 
 ### `archive/`
-Contains legacy scripts from initial dataset exploration phase (Version 1.0):
+Contains legacy scripts from Version 1.0 exploration phase:
 
 **Scripts:**
-- `download_datasets.py` - Helper for manual Roboflow downloads
-- `download_kaggle_datasets.py` - Automated Kaggle dataset downloader (attempted)
+- `download_datasets.py` - Manual Roboflow download helper
+- `download_kaggle_datasets.py` - Automated Kaggle downloader (experimental)
 - `inspect_downloads.py` - Dataset structure explorer
 - `smart_organize.py` - Early organization script (deprecated)
 
-**Status:** These scripts are no longer used but kept for reference and project history documentation.
-
-**Note:** Version 1.0 used manual Roboflow downloads. These Kaggle scripts were experimental and not used in final v1.0 dataset.
+**Status:** Archived for reference, not used in v2.0
 
 ---
 
@@ -243,8 +333,8 @@ Contains legacy scripts from initial dataset exploration phase (Version 1.0):
 **Core Libraries:**
 - Python 3.8+
 - PyTorch 2.0+
-- torchvision
-- ultralytics (for YOLO)
+- torchvision 0.15+
+- ultralytics 8.0+ (for YOLO)
 - OpenCV (cv2) - for camera inference
 - scikit-learn - for evaluation metrics
 - matplotlib, seaborn - for visualizations
@@ -256,7 +346,99 @@ Contains legacy scripts from initial dataset exploration phase (Version 1.0):
 pip install -r requirements.txt
 ```
 
-See `requirements.txt` in project root for complete dependency list with versions.
+See `requirements.txt` in project root for complete dependency list.
+
+---
+
+## Development Workflow
+
+**1. Data Preparation:**
+```bash
+# Organize images in data/raw/[class_name]/ folders
+python src/organize_dataset.py
+```
+
+**2. Training Phase:**
+```bash
+# Train ResNet (~2 hours on 20-core CPU)
+python src/train.py
+
+# Train YOLO models (~10 hours total for all 4)
+python src/train_yolo_cls.py  # Smart skip logic included!
+```
+
+**3. Evaluation Phase:**
+```bash
+# Evaluate ResNet
+python src/evaluate.py
+
+# Evaluate all YOLO models
+python src/evaluate_yolo_cls.py
+
+# Ultimate model competition
+python src/model_competition.py
+```
+
+**4. Inference/Deployment:**
+```bash
+# Single image
+python src/inference.py path/to/image.jpg
+
+# Live webcam
+python src/camera_inference.py
+```
+
+---
+
+## Technical Performance
+
+**Training Times (20-core CPU):**
+- ResNet18: 115 minutes (25 epochs)
+- YOLOv8n: ~150 minutes (25 epochs)
+- YOLOv8s: ~TBD
+- YOLOv11n: ~TBD
+- YOLOv11s: ~TBD
+
+**Model Sizes:**
+- ResNet18: ~44 MB
+- YOLOv8n-cls: ~12 MB (3.7× smaller)
+- YOLOv8s-cls: ~TBD
+- YOLOv11n: ~TBD
+- YOLOv11s: ~TBD
+
+**Inference Speed (CPU):**
+- ResNet18: ~100-150ms per image
+- YOLO models: ~30-80ms per image (faster)
+
+**Accuracy Achieved:**
+- ResNet18 Test: **99.85%** ✅
+- YOLOv8n Val: **99.9%** ✅
+- Competition winner: TBD 🏆
+
+---
+
+## Script Execution Order
+
+**For complete pipeline from scratch:**
+```bash
+# 1. Organize data
+python src/organize_dataset.py
+
+# 2. Train models (can run in parallel on different machines)
+python src/train.py              # ResNet
+python src/train_yolo_cls.py     # All YOLO models
+
+# 3. Evaluate models
+python src/evaluate.py           # ResNet evaluation
+python src/evaluate_yolo_cls.py  # YOLO evaluation
+
+# 4. Model competition (after all trained)
+python src/model_competition.py  # Champion selection
+
+# 5. Use best model for inference
+python src/inference.py test_image.jpg
+python src/camera_inference.py
+```
 
 ---
 
@@ -264,57 +446,17 @@ See `requirements.txt` in project root for complete dependency list with version
 
 **Version 1.0 (Archived):**
 - Single architecture: ResNet18 only
-- Dataset: Roboflow Universe (13,616 images)
-- Results: 96.37% test accuracy
-- Limitation: Poor real-world camera performance
-- Documentation: See `legacy/src_README_v1.md`
+- Test accuracy: 96.37%
+- Documentation: `legacy/src_README_v1.md`
 
 **Version 2.0 (Current):**
-- Dual architecture: ResNet18 + YOLOv8n-cls
-- Dataset: Improved quality, diverse sources (in progress)
-- Goal: 85-90% real-world accuracy
-- Focus: Bridge domain gap for deployment
+- 5 models: ResNet18 + 4 YOLO variants
+- ResNet test accuracy: **99.85%** ✅
+- Smart training with skip logic
+- Ultimate model competition framework
+- Production-ready performance
 
 ---
 
-## Development Workflow
-
-**Data Preparation:**
-1. Collect diverse, high-quality images
-2. Organize in `data/raw/[class_name]/` folders
-3. Run `organize_dataset.py` to create splits
-
-**Training Phase:**
-1. Train ResNet: `python src/train.py` (~11 hours)
-2. Train YOLO: `python src/train_yolo_cls.py` (~8-9 hours)
-
-**Evaluation Phase:**
-1. Evaluate ResNet: `python src/evaluate.py`
-2. Evaluate YOLO: `python src/evaluate_yolo_cls.py`
-3. Compare results, select best model
-
-**Deployment:**
-1. Use `inference.py` for file-based classification
-2. Use `camera_inference.py` for real-time webcam
-
----
-
-## Technical Notes
-
-**Training Performance:**
-- ResNet training: ~11 hours on CPU (25 epochs)
-- YOLO training: ~8-9 hours on CPU (25 epochs)
-- GPU significantly reduces training time
-
-**Model Sizes:**
-- ResNet18: 44.8 MB
-- YOLOv8n-cls: ~12 MB (3.7× smaller)
-
-**Inference Speed (CPU):**
-- ResNet18: ~50-70ms per image
-- YOLOv8n-cls: ~30-40ms per image (1.5-2× faster)
-
----
-
-*Last Updated: October 10, 2025*  
-*Version 2.0 - Dual architecture implementation with improved dataset*
+*Last Updated: October 21, 2024*  
+*Status: ResNet complete (99.85%), YOLO training in progress, competition framework ready*

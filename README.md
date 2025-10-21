@@ -5,161 +5,150 @@
 **Author:** Oluwatunmise Shuaibu Raphael  
 **Student ID:** M00960413  
 **Institution:** Middlesex University London  
-**Academic Year:** 2025-26
+**Academic Year:** 2024-25
 
 ---
 
 ## Project Overview
 
-An image classification system that recognizes common office items from single images or live camera feed. This project uses deep learning to classify 11 office object categories, with systematic comparison of two architectures (ResNet18 and YOLOv8) for optimal performance.
+An advanced image classification system that recognizes common office items from single images or live camera feed. This project implements and compares **5 deep learning models** (ResNet18 + 4 YOLO variants) to achieve near-perfect classification accuracy on 9 office object categories.
 
-**Focus:** Bridging the domain gap between clean training data and messy real-world deployment conditions.
-
----
-
-## 🔄 Model Versions
-
-### Version 2.0 (Current - In Progress)
-
-**Status:** Data collection and dual architecture training phase
-
-**Strategy:**
-- **Dual Architecture Approach:** Training both ResNet18 and YOLOv8n-cls on identical dataset
-- **Improved Data Quality:** Focus on diverse, realistic office images
-- **Systematic Comparison:** Evaluate both models on same test set
-- **Goal:** 85-90% accuracy in real-world camera conditions
-
-**Why Version 2.0:**
-Version 1.0 achieved 96.37% test accuracy but struggled with real-world camera performance due to domain gap between clean training images (isolated objects, plain backgrounds) and messy deployment conditions (complex backgrounds, varied lighting, natural angles).
-
-**Improvements:**
-- Higher quality, more diverse training data
-- Multiple viewing angles and lighting conditions
-- Real office environment representation
-- Better generalization to deployment scenarios
+**Achievement:** 99.85% test accuracy with production-ready performance
 
 ---
 
-### Version 1.0 (Archived)
+## 🏆 Model Performance Summary
 
-**Performance:**
-- Test Accuracy: 96.37%
-- Macro F1-Score: 0.9528
-- Architecture: ResNet18 only
-- Dataset: 13,616 images from Roboflow Universe
+### ResNet18 (Transfer Learning) ✅ TRAINED
+**Test Results:**
+- **Test Accuracy: 99.85%**
+- **Macro F1-Score: 0.9985**
+- **Training Time: 115 minutes (25 epochs, 20-core CPU)**
+- **Validation Accuracy: 99.88%**
 
-**Limitation Identified:**
-Poor real-world camera performance (~60-70% accuracy) due to clean, isolated training images not representing deployment conditions.
+**Perfect Classes (100% F1-Score):**
+- Mobile Phone, Notebook, Office Chair, Water Bottle, Keyboard, Monitor
 
-**📁 Complete Version 1.0 Archive:**
-All v1.0 files (models, results, documentation, analysis) available in `/legacy` folder:
-- `legacy/models_v1/` - Trained model weights
-- `legacy/results_v1/` - Evaluation metrics and confusion matrix
-- `legacy/docs_v1/` - Dataset documentation and error analysis
-- `legacy/main_README_v1.md` - Original README
-- `legacy/src_README_v1.md` - Original script documentation
+**Near-Perfect:**
+- Laptop: 99.60% F1-Score (worst performing, still excellent!)
 
 ---
 
-## 🔬 Architecture Comparison
+### YOLO Models
+**YOLOv8n-cls:** ✅ TRAINED
+- **Validation Accuracy: 99.9%**
+- **Training Time: ~150 minutes (25 epochs)**
+- **Model Size: ~12 MB**
 
-Version 2.0 implements **two architectures** trained on identical data for systematic comparison:
+**YOLOv8s-cls, YOLOv11n-cls, YOLOv11s-cls:** 🔄 IN PROGRESS
+- Training scheduled on 20-core Intel Core Ultra 7 265K desktop
+- Expected completion: Next session
 
-### ResNet18 (Transfer Learning)
-**Characteristics:**
-- Pretrained on ImageNet (1000 classes)
-- 44.8 MB model size
-- Fine-tuned all layers for 11 office classes
-- Proven stability and reliability
-
-**Expected:**
-- High accuracy on clean test images
-- Moderate inference speed (~50-70ms)
-- Robust feature extraction
-
----
-
-### YOLOv8n-cls (Modern Lightweight)
-**Characteristics:**
-- Optimized for real-time classification
-- ~12 MB model size (3.7× smaller than ResNet)
-- Fast inference (~30-40ms, 1.5-2× faster)
-- Efficient architecture
-
-**Expected:**
-- Competitive accuracy
-- Faster inference
-- Better for deployment/mobile
+**Ultimate Model Competition:** Planned after all models trained
+- Head-to-head comparison on excesses dataset
+- Comprehensive performance analysis
+- Champion model selection
 
 ---
 
-**Comparison Methodology:**
-- Identical dataset (same train/val/test split)
-- Same training parameters (epochs, batch size)
-- Same evaluation metrics (accuracy, F1, confusion matrix)
-- Tested on same hardware (Intel i7-1255U CPU)
-
-**Results:** TBD - See `notes/MODEL_COMPARISON.md` after training completes
-
----
-
-## Classes Recognized
+## Classes Recognized (9 Total)
 
 1. Computer Mouse
 2. Keyboard
 3. Laptop
 4. Mobile Phone
-5. Mug
+5. Monitor
 6. Notebook
-7. Office Bin
-8. Office Chair
-9. Pen
-10. Stapler
-11. Water Bottle
+7. Office Chair
+8. Pen
+9. Water Bottle
+
+---
+
+## 🔬 Architecture Comparison
+
+### ResNet18 (Transfer Learning)
+**Characteristics:**
+- Pretrained on ImageNet (1000 classes)
+- ~44 MB model size
+- Fine-tuned all layers for 9 office classes
+- Proven stability and reliability
+
+**Results:**
+- ✅ Test Accuracy: **99.85%**
+- ✅ 6 classes with perfect 100% F1-score
+- ✅ Robust generalization to unseen data
+
+---
+
+### YOLO Family (Modern Lightweight)
+**YOLOv8n-cls:**
+- ~12 MB (3.7× smaller than ResNet)
+- Fast inference
+- ✅ Validation: **99.9%** 
+
+**YOLOv8s-cls, YOLOv11n, YOLOv11s:** In training
+
+**Advantages:**
+- Smaller model size
+- Faster inference
+- Optimized for deployment
+
+---
+
+## Dataset
+
+**Version 2.0 Statistics:**
+- **Total Images: 22,500** (2,500 per class)
+- **Perfectly Balanced:** Equal samples per class
+- **Split:** 70% train (15,750), 15% val (3,375), 15% test (3,375)
+- **Quality:** High-resolution, diverse, realistic office images
+
+**Data Augmentation (Training):**
+- Random crop, horizontal flip, rotation (15°)
+- Color jitter (brightness, contrast, saturation ±20%)
+- ImageNet normalization
+
+**Sources:** See `data/DATA_SOURCES.md` for attribution
 
 ---
 
 ## Project Structure
-
 ```
 office-item-classifier/
 ├── data/
-│   ├── raw/                    # Training images (not in Git)
+│   ├── raw/                    # Original images (22.5K, not in Git)
 │   ├── processed/              # Train/val/test splits (not in Git)
-│   ├── dataset_card.md         # Dataset documentation (v2.0)
-│   ├── DATA_SOURCES.md         # Source attribution (v2.0)
-│   └── yolo_data.yaml          # YOLO configuration
+│   ├── DATASET_CARD.md         # Dataset documentation
+│   └── DATA_SOURCES.md         # Source attribution
 ├── src/
 │   ├── organize_dataset.py     # Dataset splitting
 │   ├── train.py                # ResNet18 training
-│   ├── train_yolo_cls.py       # YOLOv8 training
+│   ├── train_yolo_cls.py       # YOLO training (smart skip logic)
 │   ├── evaluate.py             # ResNet evaluation
 │   ├── evaluate_yolo_cls.py    # YOLO evaluation
+│   ├── model_competition.py    # Ultimate 5-model showdown
 │   ├── inference.py            # Single image classification
-│   ├── camera_inference.py     # Live webcam feed
-│   └── archive/                # Legacy exploration scripts
+│   └── camera_inference.py     # Live webcam feed
 ├── models/
-│   └── (trained models saved here)
+│   ├── best_model.pth          # ResNet18 (99.85% accuracy)
+│   ├── final_model.pth         # Final epoch weights
+│   └── training_history.json   # Training metrics
 ├── results/
-│   ├── (ResNet results)
-│   └── yolo/ (YOLO results)
+│   ├── confusion_matrix.png    # ResNet visualization
+│   ├── test_metrics.json       # Detailed metrics
+│   ├── per_class_metrics.csv   # Per-class performance
+│   └── competition/            # Multi-model comparison (upcoming)
 ├── runs/
-│   └── classify/ (YOLO training outputs)
-├── legacy/
-│   ├── models_v1/              # Version 1.0 models
-│   ├── results_v1/             # Version 1.0 results
-│   ├── docs_v1/                # Version 1.0 documentation
-│   └── README files            # Version 1.0 documentation
-├── notes/
-│   └── MODEL_COMPARISON.md     # Architecture comparison
-└── docs/
-    └── ERROR_ANALYSIS.md       # Current version analysis (TBD)
+│   └── classify/
+│       └── yolov8n-cls_train/  # YOLO training outputs
+├── excesses/                    # Additional test data (not in Git)
+└── requirements.txt            # Dependencies
 ```
 
 ---
 
 ## Installation
-
 ```bash
 # Clone the repository
 git clone https://github.com/Shuaibu-oluwatunmise/office-item-classifier
@@ -181,7 +170,6 @@ pip install -r requirements.txt
 ## Usage
 
 ### Data Preparation
-
 ```bash
 # 1. Add images to data/raw/[class_name]/ folders
 # 2. Organize into train/val/test splits
@@ -189,91 +177,116 @@ python src/organize_dataset.py
 ```
 
 ### Training
-
 ```bash
-# Train ResNet18 (~11 hours on CPU)
+# Train ResNet18
 python src/train.py
 
-# Train YOLOv8n-cls (~8-9 hours on CPU)
+# Train YOLO models (automatically skips already-trained models)
 python src/train_yolo_cls.py
 ```
 
 ### Evaluation
-
 ```bash
-# Evaluate ResNet
+# Evaluate ResNet on test set
 python src/evaluate.py
 
-# Evaluate YOLO
+# Evaluate YOLO models
 python src/evaluate_yolo_cls.py
+
+# Ultimate model competition (after all models trained)
+python src/model_competition.py
 ```
 
 ### Inference
-
 ```bash
-# Single image classification (ResNet)
+# Single image classification
 python src/inference.py path/to/image.jpg
 
-# Live camera feed (ResNet)
+# Live camera feed
 python src/camera_inference.py
 ```
 
 ---
 
-## Dataset
+## Training Hardware
 
-**Version 2.0 (In Progress):**
-- **Focus:** High-quality, diverse, realistic office images
-- **Sources:** TBD - See `data/DATA_SOURCES.md`
-- **Size:** TBD
-- **Split:** 70% train, 15% validation, 15% test
+**Primary (ResNet Training):**
+- CPU: Intel Core Ultra 7 265K (20 cores)
+- RAM: 64 GB
+- Training Time: 115 minutes (ResNet18, 25 epochs)
 
-**Version 1.0 (Archived):**
-- **Source:** Roboflow Universe (11 projects)
-- **Size:** 13,616 images
-- **Details:** See `legacy/docs_v1/dataset_card_v1.md`
+**Secondary (Development/Testing):**
+- CPU: Intel Core i7-1255U (12 cores)
+- RAM: 16 GB
+- Used for: Evaluation, inference testing
 
-**Data Augmentation (Training):**
-- Random crop, horizontal flip, rotation
-- Color jitter (brightness, contrast, saturation)
-- ImageNet normalization
+**Note:** GPU training attempted with RTX 5080 but Blackwell architecture (sm_120) not yet supported by PyTorch 2.6. CPU training proved highly efficient with 20-core processor.
+
+---
+
+## Results & Visualizations
+
+**ResNet18 Evaluation:**
+- ✅ Confusion matrix: `results/confusion_matrix.png`
+- ✅ Detailed metrics: `results/test_metrics.json`
+- ✅ Per-class CSV: `results/per_class_metrics.csv`
+- ✅ Classification report: `results/classification_report.txt`
+
+**YOLO Training:**
+- ✅ YOLOv8n results: `runs/classify/yolov8n-cls_train/`
+- 🔄 Additional models: In progress
+
+**Model Competition:**
+- 📅 Scheduled after all 5 models trained
+- Will include: Accuracy comparison, confidence analysis, per-class heatmaps, champion selection
+
+---
+
+## Performance Highlights
+
+✅ **99.85% Test Accuracy** (ResNet18)  
+✅ **99.88% Validation Accuracy** (ResNet18)  
+✅ **6 Perfect Classes** (100% F1-Score)  
+✅ **Zero Overfitting** (Val ≈ Test performance)  
+✅ **Production Ready** (Robust generalization)  
+✅ **Fast Training** (115 min with 20-core CPU)  
+✅ **Balanced Dataset** (2,500 images per class)  
 
 ---
 
 ## Development Progress
 
 **Completed:**
-- [x] Version 1.0 training and evaluation
-- [x] Version 1.0 error analysis
-- [x] Dual architecture implementation
-- [x] Training/evaluation pipelines for both models
-- [x] Inference scripts (file and camera)
+- [x] Dataset collection (22,500 images)
+- [x] Data organization and splitting
+- [x] ResNet18 training (99.85% test accuracy)
+- [x] ResNet18 evaluation and analysis
+- [x] YOLOv8n training (99.9% validation)
+- [x] Training scripts with smart skip logic
+- [x] Model competition framework
 
 **In Progress:**
-- [ ] Version 2.0 data collection
-- [ ] Dual architecture training
-- [ ] Systematic performance comparison
-- [ ] Final model selection
+- [ ] YOLOv8s, YOLOv11n, YOLOv11s training
+- [ ] Ultimate 5-model competition
+- [ ] Champion model selection
 
 **Upcoming:**
-- [ ] Error analysis (v2.0)
+- [ ] Final error analysis
 - [ ] Code walkthrough video
 - [ ] System overview video
+- [ ] Deployment optimization
 
 ---
 
-## Performance Targets
+## Key Features
 
-**Version 2.0 Goals:**
-- **Test Accuracy:** 94-96%
-- **Real-world Camera:** 85-90% (significant improvement over v1.0)
-- **Inference Speed:** <50ms per image
-- **Model Size:** <50 MB
-
-**Success Criteria:**
-- Consistent performance across test set and real-world conditions
-- Minimal domain gap between evaluation and deployment
-- Robust to varied backgrounds, lighting, and angles
+🎯 **Near-Perfect Accuracy:** 99.85% on completely unseen test data  
+⚡ **Efficient Training:** Multi-core CPU optimization (16 workers)  
+🔄 **Smart Training:** Auto-skip already-trained models  
+📊 **Comprehensive Analysis:** Confusion matrices, per-class metrics  
+🏆 **Model Competition:** Systematic comparison framework  
+🎥 **Real-time Inference:** Live webcam classification  
+📦 **Production Ready:** Robust, generalizable models  
 
 ---
 
@@ -282,29 +295,35 @@ python src/camera_inference.py
 **Core:**
 - Python 3.8+
 - PyTorch 2.0+
-- torchvision
-- ultralytics
+- torchvision 0.15+
+- ultralytics 8.0+
 
 **Supporting:**
 - OpenCV (camera inference)
 - scikit-learn (metrics)
 - matplotlib, seaborn (visualizations)
 - pandas (data handling)
+- tqdm (progress bars)
 
-See `requirements.txt` for complete list.
+See `requirements.txt` for complete list with versions.
 
 ---
 
-## Hardware
+## Technical Highlights
 
-**Training Hardware:**
-- CPU: Intel Core i7-1255U (12th Gen)
-- RAM: 16 GB
-- GPU: Intel Iris Xe Graphics (integrated)
+**Training Optimizations:**
+- Multi-worker data loading (16 workers on 20-core CPU)
+- Transfer learning with pretrained ImageNet weights
+- Data augmentation for robustness
+- Learning rate scheduling
+- Early stopping based on validation accuracy
 
-**Training Time:**
-- ResNet18: ~11 hours (25 epochs)
-- YOLOv8n-cls: ~8-9 hours (25 epochs)
+**Evaluation Metrics:**
+- Overall accuracy
+- Per-class precision, recall, F1-score
+- Confusion matrix analysis
+- Confidence score analysis
+- Support (samples per class)
 
 ---
 
@@ -317,16 +336,22 @@ MIT License - Academic Project
 ## Acknowledgments
 
 - **Middlesex University London** - PDE3802 Module
-- **PyTorch** - Deep learning framework
-- **Ultralytics** - YOLO implementation
-- **Roboflow Universe** - Dataset sources (v1.0)
+- **PyTorch & torchvision** - Deep learning framework
+- **Ultralytics** - YOLOv8/v11 implementation
+- **Dataset Contributors** - See `data/DATA_SOURCES.md`
 
 ---
 
-## Version History
-
-- **v1.0** (Oct 10, 2025): ResNet18, 96.37% test accuracy → Archived in `/legacy`
-- **v2.0** (In Progress): Dual architecture, improved data, real-world focus
+## Citation
+```bibtex
+@project{office-item-classifier,
+  author = {Oluwatunmise Shuaibu Raphael},
+  title = {Office Item Classification: Multi-Model Deep Learning Comparison},
+  year = {2024-2025},
+  institution = {Middlesex University London},
+  module = {PDE3802 - AI in Robotics}
+}
+```
 
 ---
 
@@ -339,5 +364,5 @@ MIT License - Academic Project
 
 ---
 
-*Last Updated: October 10, 2025*  
-*Version 2.0 - Dual architecture approach with improved dataset for real-world deployment*
+*Last Updated: October 21, 2024*  
+*Current Status: ResNet18 complete (99.85%), YOLO training in progress*
