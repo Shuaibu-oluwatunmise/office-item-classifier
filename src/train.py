@@ -18,7 +18,7 @@ MODEL_DIR = Path('models')
 BATCH_SIZE = 32
 NUM_EPOCHS = 25
 LEARNING_RATE = 0.001
-NUM_WORKERS = 4
+NUM_WORKERS = 4 #adjust to your CPU capacities
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 # Class names (in alphabetical order as torchvision.datasets.ImageFolder loads them)
