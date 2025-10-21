@@ -67,7 +67,7 @@ def create_test_dataloader():
     
     return test_loader, test_dataset
 
-def load_model(num_classes=11):
+def load_model(num_classes=9):
     """
     Load trained model
     """

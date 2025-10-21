@@ -1,0 +1,10 @@
+,computer_mouse,keyboard,laptop,mobile_phone,monitor,notebook,office_chair,pen,water_bottle
+computer_mouse,373,1,1,0,0,0,0,0,0
+keyboard,0,375,0,0,0,0,0,0,0
+laptop,0,0,375,0,0,0,0,0,0
+mobile_phone,0,0,0,375,0,0,0,0,0
+monitor,0,0,2,0,373,0,0,0,0
+notebook,0,0,0,0,0,375,0,0,0
+office_chair,0,0,0,0,0,0,375,0,0
+pen,0,1,0,0,0,0,0,374,0
+water_bottle,0,0,0,0,0,0,0,0,375

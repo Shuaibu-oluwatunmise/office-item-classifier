@@ -1,0 +1,79 @@
+PS C:\Users\shuai\office-item-classifier> python src/evaluate.py
+============================================================
+OFFICE ITEM CLASSIFICATION - MODEL EVALUATION
+============================================================
+Device: cpu
+Model: models\best_model.pth
+Test Data: data\processed\test
+============================================================
+
+Loading test dataset...
+Test samples: 3375
+Classes: 9
+
+Loading trained model...
+C:\Users\shuai\AppData\Local\Programs\Python\Python38\lib\site-packages\torchvision\models\_utils.py:208: UserWarning: The parameter 'pretrained' is deprecated since 0.13 and may be removed in the future, please use 'weights' instead.
+  warnings.warn(
+C:\Users\shuai\AppData\Local\Programs\Python\Python38\lib\site-packages\torchvision\models\_utils.py:223: UserWarning: Arguments other than a weight enum or `None` for 'weights' are deprecated since 0.13 and may be removed in the future. The current behavior is equivalent to passing `weights=None`.
+  warnings.warn(msg)
+src/evaluate.py:80: FutureWarning: You are using `torch.load` with `weights_only=False` (the current default value), which uses the default pickle module implicitly. It is possible to construct malicious pickle data which will execute arbitrary code during unpickling (See https://github.com/pytorch/pytorch/blob/main/SECURITY.md#untrusted-models for more details). In a future release, the default value for `weights_only` will be flipped to `True`. This limits the functions that could be executed during unpickling. Arbitrary objects will no longer be allowed to be loaded via this mode unless they are explicitly allowlisted by the user via `torch.serialization.add_safe_globals`. We recommend you start setting `weights_only=True` for any use case where you don't have full control of the loaded file. Please open an issue on GitHub for any issues related to this experimental feature.
+  model.load_state_dict(torch.load(MODEL_PATH, map_location=DEVICE))
+Model loaded successfully!
+
+Running evaluation on test set...
+Evaluating: 100%|███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 106/106 [01:57<00:00,  1.11s/it]
+
+Calculating metrics...
+
+============================================================
+EVALUATION SUMMARY
+============================================================
+Overall Accuracy: 0.9985 (99.85%)
+Macro F1-Score: 0.9985
+
+Per-Class Performance:
+------------------------------------------------------------
+Class                Precision    Recall       F1-Score
+------------------------------------------------------------
+computer_mouse       1.0000       0.9947       0.9973
+keyboard             0.9947       1.0000       0.9973
+laptop               0.9921       1.0000       0.9960
+mobile_phone         1.0000       1.0000       1.0000
+monitor              1.0000       0.9947       0.9973
+notebook             1.0000       1.0000       1.0000
+office_chair         1.0000       1.0000       1.0000
+pen                  1.0000       0.9973       0.9987
+water_bottle         1.0000       1.0000       1.0000
+============================================================
+
+Best performing class: mobile_phone (F1: 1.0000)
+Worst performing class: laptop (F1: 0.9960)
+
+
+Generating visualizations...
+
+Confusion matrix saved to results\confusion_matrix.png
+
+Saving results...
+Metrics saved to results\test_metrics.json
+Classification report saved to results\classification_report.txt
+Per-class metrics saved to results\per_class_metrics.csv
+Confusion matrix saved to results\confusion_matrix.csv
+
+============================================================
+EVALUATION COMPLETE!
+============================================================
+
+Results saved to results/
+Files generated:
+  - test_metrics.json
+  - classification_report.txt
+  - per_class_metrics.csv
+  - confusion_matrix.csv
+  - confusion_matrix.png
+
+Next steps:
+  1. Review confusion matrix for common misclassifications
+  2. Analyze per-class performance
+  3. Create inference.py for single image predictions
+PS C:\Users\shuai\office-item-classifier> 
