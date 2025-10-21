@@ -31,7 +31,7 @@ def get_transform():
         transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225])
     ])
 
-def load_model(num_classes=11):
+def load_model(num_classes=9):
     """
     Load trained model
     """
