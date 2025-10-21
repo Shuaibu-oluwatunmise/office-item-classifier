@@ -1,0 +1,40 @@
+PS C:\Users\shuai\office-item-classifier> python src/organize_dataset.py
+Starting dataset organization...
+Raw data directory: data\raw
+Processed data directory: data\processed
+Split ratios - Train: 0.7, Val: 0.15, Test: 0.15
+
+Directory structure created successfully.
+Processed monitor: 1750 train, 375 val, 375 test
+Processed water_bottle: 1750 train, 375 val, 375 test
+Processed mobile_phone: 1750 train, 375 val, 375 test
+Processed keyboard: 1750 train, 375 val, 375 test
+Processed computer_mouse: 1750 train, 375 val, 375 test
+Processed pen: 1750 train, 375 val, 375 test
+Processed notebook: 1750 train, 375 val, 375 test
+Processed office_chair: 1750 train, 375 val, 375 test
+Processed laptop: 1750 train, 375 val, 375 test
+
+============================================================
+DATASET STATISTICS
+============================================================
+Total images: 22500
+Training: 15750 (70.0%)
+Validation: 3375 (15.0%)
+Testing: 3375 (15.0%)
+
+Per-class breakdown:
+------------------------------------------------------------
+monitor              | Train: 1750 | Val:  375 | Test:  375 | Total: 2500
+water_bottle         | Train: 1750 | Val:  375 | Test:  375 | Total: 2500
+mobile_phone         | Train: 1750 | Val:  375 | Test:  375 | Total: 2500
+keyboard             | Train: 1750 | Val:  375 | Test:  375 | Total: 2500
+computer_mouse       | Train: 1750 | Val:  375 | Test:  375 | Total: 2500
+pen                  | Train: 1750 | Val:  375 | Test:  375 | Total: 2500
+notebook             | Train: 1750 | Val:  375 | Test:  375 | Total: 2500
+office_chair         | Train: 1750 | Val:  375 | Test:  375 | Total: 2500
+laptop               | Train: 1750 | Val:  375 | Test:  375 | Total: 2500
+============================================================
+
+Dataset organization complete!
+PS C:\Users\shuai\office-item-classifier> 
