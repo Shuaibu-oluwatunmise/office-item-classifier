@@ -1,14 +1,13 @@
 """
 Evaluate Multiple YOLO Models on Office Item Classification
-Compares YOLOv8n, YOLOv8s, and YOLOv11 performance
+Compares YOLOv8n, YOLOv8s, YOLOv11n, and YOLOv11s performance
 """
 
 from ultralytics import YOLO
-import os
 from pathlib import Path
 import json
 
-ROOT_DIR = Path(r"C:\Users\shuai\office-item-classifier")
+ROOT_DIR = Path(__file__).parent.parent.absolute()
 TEST_DIR = ROOT_DIR / "data" / "processed" / "test"
 RESULTS_DIR = ROOT_DIR / "results" / "yolo"
 
@@ -16,7 +15,8 @@ RESULTS_DIR = ROOT_DIR / "results" / "yolo"
 MODELS = {
     "YOLOv8n-cls": ROOT_DIR / "runs" / "classify" / "yolov8n-cls_train" / "weights" / "best.pt",
     "YOLOv8s-cls": ROOT_DIR / "runs" / "classify" / "yolov8s-cls_train" / "weights" / "best.pt",
-    "YOLOv11n-cls": ROOT_DIR / "runs" / "classify" / "yolo11n-cls_train" / "weights" / "best.pt",
+    "YOLOv11n-cls": ROOT_DIR / "runs" / "classify" / "yolov11n-cls_train" / "weights" / "best.pt",
+    "YOLOv11s-cls": ROOT_DIR / "runs" / "classify" / "yolov11s-cls_train" / "weights" / "best.pt",
 }
 
 # Create results directory

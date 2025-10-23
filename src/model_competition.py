@@ -245,7 +245,7 @@ def create_leaderboard(all_results, save_dir):
     df.to_csv(save_dir / 'leaderboard.csv', index=False)
     
     # Create formatted text report
-    with open(save_dir / 'competition_report.txt', 'w') as f:
+    with open(save_dir / 'competition_report.txt', 'w', encoding='utf-8') as f:
         f.write("="*80 + "\n")
         f.write("🏆 ULTIMATE MODEL COMPETITION - OFFICE ITEM CLASSIFIER 🏆\n")
         f.write("="*80 + "\n")

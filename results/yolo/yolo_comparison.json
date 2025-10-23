@@ -1,0 +1,18 @@
+{
+  "YOLOv8n-cls": {
+    "top1_accuracy": 1.0,
+    "top5_accuracy": 1.0
+  },
+  "YOLOv8s-cls": {
+    "top1_accuracy": 1.0,
+    "top5_accuracy": 1.0
+  },
+  "YOLOv11n-cls": {
+    "top1_accuracy": 1.0,
+    "top5_accuracy": 1.0
+  },
+  "YOLOv11s-cls": {
+    "top1_accuracy": 1.0,
+    "top5_accuracy": 1.0
+  }
+}

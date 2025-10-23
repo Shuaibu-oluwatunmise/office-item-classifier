@@ -1,0 +1,46 @@
+================================================================================
+🏆 ULTIMATE MODEL COMPETITION - OFFICE ITEM CLASSIFIER 🏆
+================================================================================
+
+Date: 2025-10-23 02:05:04
+Test Set: Excesses Folder
+Total Samples: 12091
+Classes: 9
+
+================================================================================
+FINAL LEADERBOARD
+================================================================================
+
+🥇 YOLOv8s
+   Accuracy:         99.99%
+   Avg Confidence:   99.99%
+   Correct Conf:     99.99%
+
+🥈 YOLOv8n
+   Accuracy:         99.98%
+   Avg Confidence:   99.98%
+   Correct Conf:     99.98%
+
+🥉 YOLOv11n
+   Accuracy:         99.98%
+   Avg Confidence:   99.99%
+   Correct Conf:     99.99%
+
+4th YOLOv11s
+   Accuracy:         99.97%
+   Avg Confidence:   99.99%
+   Correct Conf:     99.99%
+
+5th ResNet18
+   Accuracy:         99.80%
+   Avg Confidence:   99.40%
+   Correct Conf:     99.49%
+
+================================================================================
+🎉 CHAMPION 🎉
+================================================================================
+
+YOLOv8s wins with 99.99% accuracy!
+Average confidence: 99.99%
+
+

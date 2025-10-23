@@ -1,0 +1,92 @@
+{
+  "ResNet18": {
+    "accuracy": 0.9980150525184022,
+    "per_class_accuracy": [
+      0.9955780164245104,
+      1.0,
+      0.9989270386266095,
+      1.0,
+      0.9953407105416424,
+      1.0,
+      1.0,
+      0.9954098360655738,
+      1.0
+    ],
+    "avg_confidence": 0.9940081834793091,
+    "correct_confidence": 0.9949452877044678,
+    "incorrect_confidence": 0.522839367389679,
+    "total_samples": 12091
+  },
+  "YOLOv8n": {
+    "accuracy": 0.9998345877098669,
+    "per_class_accuracy": [
+      1.0,
+      0.9991452991452991,
+      1.0,
+      1.0,
+      1.0,
+      0.9987864077669902,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "avg_confidence": 0.9997707061915074,
+    "correct_confidence": 0.9998178589244429,
+    "incorrect_confidence": 0.7147560119628906,
+    "total_samples": 12091
+  },
+  "YOLOv8s": {
+    "accuracy": 0.9999172938549334,
+    "per_class_accuracy": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.9987864077669902,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "avg_confidence": 0.9998712350619992,
+    "correct_confidence": 0.999873188135543,
+    "incorrect_confidence": 0.9762585759162903,
+    "total_samples": 12091
+  },
+  "YOLOv11n": {
+    "accuracy": 0.9997518815648002,
+    "per_class_accuracy": [
+      1.0,
+      0.9991452991452991,
+      1.0,
+      1.0,
+      1.0,
+      0.9975728155339806,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "avg_confidence": 0.9998833940299487,
+    "correct_confidence": 0.9999174159895419,
+    "incorrect_confidence": 0.8627975781758627,
+    "total_samples": 12091
+  },
+  "YOLOv11s": {
+    "accuracy": 0.9996691754197337,
+    "per_class_accuracy": [
+      1.0,
+      1.0,
+      1.0,
+      1.0,
+      0.9982527664531159,
+      0.9987864077669902,
+      1.0,
+      1.0,
+      1.0
+    ],
+    "avg_confidence": 0.9998696840595207,
+    "correct_confidence": 0.9999130624611108,
+    "incorrect_confidence": 0.8687909990549088,
+    "total_samples": 12091
+  }
+}
