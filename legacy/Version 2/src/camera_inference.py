@@ -14,7 +14,7 @@ import time
 
 # Configuration
 DEVICE = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-CAMERA_INDEX = 1
+CAMERA_INDEX = 0
 CONFIDENCE_THRESHOLD = 0.80
 CENTER_CROP_SCALE = 0.7
 
