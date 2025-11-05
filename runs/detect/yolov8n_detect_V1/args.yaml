@@ -13,7 +13,7 @@ cache: false
 device: '0'
 workers: 12
 project: runs/detect
-name: yolov8n_detect_V12
+name: yolov8n_detect_V1
 exist_ok: false
 pretrained: true
 optimizer: AdamW
@@ -103,4 +103,4 @@ auto_augment: randaugment
 erasing: 0.4
 cfg: null
 tracker: botsort.yaml
-save_dir: C:\Users\OS439\office-item-classifier\runs\detect\yolov8n_detect_V12
+save_dir: C:\Users\OS439\office-item-classifier\runs\detect\yolov8n_detect_V1
