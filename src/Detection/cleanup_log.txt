@@ -1,0 +1,136 @@
+
+============================================================
+🧹 Cleanup started: 2025-11-05 20:34:00.530174
+============================================================
+[DEL] Removed label: Data\train\labels\Keyboard1172.txt
+     └─ Removed image: Data\train\images\Keyboard1172.jpg
+[DEL] Removed label: Data\train\labels\Keyboard1196.txt
+     └─ Removed image: Data\train\images\Keyboard1196.jpg
+[FIX] Cleaned bad lines in: Data\train\labels\Keyboard1261.txt
+[DEL] Removed label: Data\train\labels\Keyboard1276.txt
+     └─ Removed image: Data\train\images\Keyboard1276.jpg
+[DEL] Removed label: Data\train\labels\Keyboard1287.txt
+     └─ Removed image: Data\train\images\Keyboard1287.jpg
+[DEL] Removed label: Data\train\labels\Keyboard1293.txt
+     └─ Removed image: Data\train\images\Keyboard1293.jpg
+[DEL] Removed label: Data\train\labels\Keyboard1301.txt
+     └─ Removed image: Data\train\images\Keyboard1301.jpg
+[FIX] Cleaned bad lines in: Data\train\labels\Keyboard1332.txt
+[DEL] Removed label: Data\train\labels\Keyboard1347.txt
+     └─ Removed image: Data\train\images\Keyboard1347.jpg
+[DEL] Removed label: Data\train\labels\Keyboard1396.txt
+     └─ Removed image: Data\train\images\Keyboard1396.jpg
+[DEL] Removed label: Data\train\labels\Keyboard1411.txt
+     └─ Removed image: Data\train\images\Keyboard1411.jpg
+[DEL] Removed label: Data\train\labels\Keyboard1465.txt
+     └─ Removed image: Data\train\images\Keyboard1465.jpg
+[DEL] Removed label: Data\train\labels\Keyboard1482.txt
+     └─ Removed image: Data\train\images\Keyboard1482.jpg
+[DEL] Removed label: Data\train\labels\Keyboard1487.txt
+     └─ Removed image: Data\train\images\Keyboard1487.jpg
+[DEL] Removed label: Data\train\labels\Keyboard1497.txt
+     └─ Removed image: Data\train\images\Keyboard1497.jpg
+[DEL] Removed label: Data\train\labels\Keyboard1507.txt
+     └─ Removed image: Data\train\images\Keyboard1507.jpg
+[DEL] Removed label: Data\train\labels\Keyboard1513.txt
+     └─ Removed image: Data\train\images\Keyboard1513.jpg
+[FIX] Cleaned bad lines in: Data\train\labels\Keyboard1517.txt
+[FIX] Cleaned bad lines in: Data\train\labels\Keyboard1625.txt
+[FIX] Cleaned bad lines in: Data\train\labels\Keyboard1630.txt
+[DEL] Removed label: Data\train\labels\Keyboard1644.txt
+     └─ Removed image: Data\train\images\Keyboard1644.jpg
+[DEL] Removed label: Data\train\labels\Notebook1173.txt
+     └─ Removed image: Data\train\images\Notebook1173.jpg
+[DEL] Removed label: Data\train\labels\Notebook1186.txt
+     └─ Removed image: Data\train\images\Notebook1186.jpg
+[DEL] Removed label: Data\train\labels\Pen1110.txt
+     └─ Removed image: Data\train\images\Pen1110.jpg
+[DEL] Removed label: Data\train\labels\Pen1111.txt
+     └─ Removed image: Data\train\images\Pen1111.jpg
+[DEL] Removed label: Data\train\labels\Pen1112.txt
+     └─ Removed image: Data\train\images\Pen1112.jpg
+[DEL] Removed label: Data\train\labels\Pen1113.txt
+     └─ Removed image: Data\train\images\Pen1113.jpg
+[DEL] Removed label: Data\train\labels\Pen1114.txt
+     └─ Removed image: Data\train\images\Pen1114.jpg
+[DEL] Removed label: Data\train\labels\Pen1115.txt
+     └─ Removed image: Data\train\images\Pen1115.jpg
+[DEL] Removed label: Data\train\labels\Pen1116.txt
+     └─ Removed image: Data\train\images\Pen1116.jpg
+[DEL] Removed label: Data\train\labels\Pen1118.txt
+     └─ Removed image: Data\train\images\Pen1118.jpg
+[DEL] Removed label: Data\train\labels\Pen1119.txt
+     └─ Removed image: Data\train\images\Pen1119.jpg
+[DEL] Removed label: Data\train\labels\Pen1120.txt
+     └─ Removed image: Data\train\images\Pen1120.jpg
+[DEL] Removed label: Data\train\labels\Pen1121.txt
+     └─ Removed image: Data\train\images\Pen1121.jpg
+[DEL] Removed label: Data\train\labels\Pen1122.txt
+     └─ Removed image: Data\train\images\Pen1122.jpg
+[DEL] Removed label: Data\train\labels\Pen1124.txt
+     └─ Removed image: Data\train\images\Pen1124.jpg
+[DEL] Removed label: Data\train\labels\Pen1128.txt
+     └─ Removed image: Data\train\images\Pen1128.jpg
+[DEL] Removed label: Data\train\labels\Pen1129.txt
+     └─ Removed image: Data\train\images\Pen1129.jpg
+[DEL] Removed label: Data\train\labels\Pen1130.txt
+     └─ Removed image: Data\train\images\Pen1130.jpg
+[DEL] Removed label: Data\train\labels\Pen1132.txt
+     └─ Removed image: Data\train\images\Pen1132.jpg
+[DEL] Removed label: Data\train\labels\Pen1133.txt
+     └─ Removed image: Data\train\images\Pen1133.jpg
+[DEL] Removed label: Data\train\labels\Pen1139.txt
+     └─ Removed image: Data\train\images\Pen1139.jpg
+[FIX] Cleaned bad lines in: Data\train\labels\Pen1140.txt
+[DEL] Removed label: Data\train\labels\Pen1198.txt
+     └─ Removed image: Data\train\images\Pen1198.jpg
+[DEL] Removed label: Data\train\labels\Pen1199.txt
+     └─ Removed image: Data\train\images\Pen1199.jpg
+[DEL] Removed label: Data\train\labels\Pen1200.txt
+     └─ Removed image: Data\train\images\Pen1200.jpg
+[FIX] Cleaned bad lines in: Data\train\labels\Pen1201.txt
+[DEL] Removed label: Data\train\labels\Pen1202.txt
+     └─ Removed image: Data\train\images\Pen1202.jpg
+[DEL] Removed label: Data\train\labels\Pen1203.txt
+     └─ Removed image: Data\train\images\Pen1203.jpg
+[DEL] Removed label: Data\train\labels\Pen1204.txt
+     └─ Removed image: Data\train\images\Pen1204.jpg
+[DEL] Removed label: Data\train\labels\Pen1206.txt
+     └─ Removed image: Data\train\images\Pen1206.jpg
+[DEL] Removed label: Data\train\labels\Pen1207.txt
+     └─ Removed image: Data\train\images\Pen1207.jpg
+[DEL] Removed label: Data\train\labels\Pen1210.txt
+     └─ Removed image: Data\train\images\Pen1210.jpg
+[DEL] Removed label: Data\train\labels\Pen1211.txt
+     └─ Removed image: Data\train\images\Pen1211.jpg
+[DEL] Removed label: Data\train\labels\Pen1215.txt
+     └─ Removed image: Data\train\images\Pen1215.jpg
+[DEL] Removed label: Data\train\labels\Pen1216.txt
+     └─ Removed image: Data\train\images\Pen1216.jpg
+[DEL] Removed label: Data\train\labels\Pen1217.txt
+     └─ Removed image: Data\train\images\Pen1217.jpg
+[DEL] Removed label: Data\train\labels\Pen1219.txt
+     └─ Removed image: Data\train\images\Pen1219.jpg
+[DEL] Removed label: Data\train\labels\Pen1222.txt
+     └─ Removed image: Data\train\images\Pen1222.jpg
+[DEL] Removed label: Data\train\labels\Pen1273.txt
+     └─ Removed image: Data\train\images\Pen1273.jpg
+[DEL] Removed label: Data\train\labels\Pen1275.txt
+     └─ Removed image: Data\train\images\Pen1275.jpg
+[DEL] Removed label: Data\train\labels\Pen1276.txt
+     └─ Removed image: Data\train\images\Pen1276.jpg
+
+✅ Cleanup complete!
+
+
+============================================================
+🧹 Cleanup started: 2025-11-05 20:35:02.125407
+============================================================
+
+📊 SUMMARY
+   • Labels deleted: 0
+   • Images deleted: 0
+   • Labels cleaned: 0
+
+✅ Cleanup complete!
+
