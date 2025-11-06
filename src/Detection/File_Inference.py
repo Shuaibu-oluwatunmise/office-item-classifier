@@ -7,7 +7,7 @@ import numpy as np
 
 def test_yolov8_detection():
     # Configuration
-    model_path = 'runs/detect/yolov8n_detect_V3/weights/best.pt'  # Path to your trained model
+    model_path = 'runs/detect/yolov8n_detect_V4/weights/best.pt'  # Path to your trained model
     input_folder = 'my_data'                      # Folder containing images to test
     output_folder = 'detection_results'               # Folder to save annotated images
     confidence_threshold = 0.25                       # Minimum confidence to show detection

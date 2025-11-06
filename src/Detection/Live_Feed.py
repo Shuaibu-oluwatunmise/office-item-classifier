@@ -10,7 +10,7 @@ from datetime import datetime
 class WebcamDetector:
     def __init__(self):
         # Load your trained YOLO detection model
-        self.model = YOLO('runs/detect/yolov8n_detect_V3/weights/best.pt')  # Update path to your detection model
+        self.model = YOLO('runs/detect/yolov8n_detect_V4/weights/best.pt')  # Update path to your detection model
         
         # Video settings
         self.cap = None
