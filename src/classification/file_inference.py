@@ -9,7 +9,7 @@ from tqdm import tqdm  # ✅ for progress bars
 # -------------------------------
 # CONFIGURATION
 # -------------------------------
-MODEL_PATH = Path("runs/classify/yolov8n_cls_V3/weights/best.pt")
+MODEL_PATH = Path("runs/classify/yolov8n_cls_V4/weights/best.pt")
 
 FONT_SIZE = 60
 TEXT_COLOR = (255, 255, 255)

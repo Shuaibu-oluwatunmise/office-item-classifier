@@ -7,7 +7,7 @@ import numpy as np
 # -------------------------------
 # CONFIGURATION
 # -------------------------------
-MODEL_PATH = "runs/classify/yolov8n_cls_V3/weights/best.pt"
+MODEL_PATH = "runs/classify/yolov8n_cls_V4/weights/best.pt"
 FONT_SIZE = 36
 FONT_PATH = None  # Optional custom .ttf font
 CONF_THRESHOLD = 0.3  # minimum confidence to show prediction
