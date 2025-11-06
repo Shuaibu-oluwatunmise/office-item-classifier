@@ -2,7 +2,7 @@
 import os
 from collections import Counter
 
-BASE_PATH = "Data"
+BASE_PATH = "../../Data"
 SUBSETS = ["train", "val", "test"]
 IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png"]
 

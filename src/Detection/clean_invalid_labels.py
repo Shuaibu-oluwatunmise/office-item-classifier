@@ -2,7 +2,7 @@
 import os
 from datetime import datetime
 
-BASE_PATH = "Data"
+BASE_PATH = "../../Data"
 SUBSETS = ["train", "val", "test"]
 IMAGE_EXTENSIONS = [".jpg", ".jpeg", ".png"]
 LOG_FILE = "cleanup_log.txt"

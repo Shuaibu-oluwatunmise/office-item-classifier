@@ -1,7 +1,7 @@
 #Detection/check_labels.py
 import os
 
-BASE_PATH = "Data"
+BASE_PATH = "../../Data"
 SUBSETS = ["train", "val", "test"]
 
 def check_label_files():
