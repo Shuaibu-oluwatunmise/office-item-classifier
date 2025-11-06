@@ -6,37 +6,39 @@ from components.widgets import header
 from screens.home import HomeScreen
 from screens.input_select import InputSelectScreen
 from screens.processing import ProcessingScreen
+from screens.live_camera import LiveCameraScreen
 from screens.results import ResultsScreen
 
-APP_W, APP_H = 1100, 750
+APP_W, APP_H = 1200, 800
 
 class App(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("Office Item Classifier")
-        self.configure(bg=COLORS["light"])
+        self.configure(bg=COLORS["bg_darkest"])
         self.geometry(f"{APP_W}x{APP_H}")
-        self.minsize(1000, 650)
+        self.minsize(1100, 700)
 
-        # Modern navigation bar with better styling
-        self.nav = tk.Frame(self, bg=COLORS["dark"], height=50)
+        # Modern navigation bar with neon accents
+        self.nav = tk.Frame(self, bg=COLORS["bg_darker"], height=55)
         self.nav.pack(fill="x")
         self.nav.pack_propagate(False)
         
-        # Add subtle bottom border to nav
-        nav_border = tk.Frame(self, bg=COLORS["primary"], height=2)
+        # Neon green accent bar at bottom of nav
+        nav_border = tk.Frame(self, bg=COLORS["primary"], height=3)
         nav_border.pack(fill="x")
         
         self._make_nav()
 
-        # Main container with subtle background
-        self.container = tk.Frame(self, bg=COLORS["light"])
+        # Main container with dark background
+        self.container = tk.Frame(self, bg=COLORS["bg_darkest"])
         self.container.pack(fill="both", expand=True)
 
         self.state = {
             "mode": None,
             "model_path": None,
             "sources": None,
+            "input_type": None,
             "output_dir": None
         }
 
@@ -45,49 +47,50 @@ class App(tk.Tk):
     # ---- Navigation Bar ----------------------------------------------------
 
     def _make_nav(self):
-        """Create a modern navigation bar with better styling"""
+        """Create a modern navigation bar with neon green accents"""
         
         # Left side - branding and main nav
-        left_nav = tk.Frame(self.nav, bg=COLORS["dark"])
+        left_nav = tk.Frame(self.nav, bg=COLORS["bg_darker"])
         left_nav.pack(side="left", fill="y")
         
-        # App title/logo
+        # App title/logo with neon accent
         logo_label = tk.Label(
             left_nav,
-            text="📊 Classifier",
-            bg=COLORS["dark"],
-            fg="white",
-            font=(FONTS["heading"], 12, "bold"),
-            padx=16
+            text="🤖 Classifier",
+            bg=COLORS["bg_darker"],
+            fg=COLORS["primary"],  # Neon green
+            font=(FONTS["heading"], 13, "bold"),
+            padx=18
         )
-        logo_label.pack(side="left", pady=10)
+        logo_label.pack(side="left", pady=12)
         
         # Separator
-        sep = tk.Frame(left_nav, bg=COLORS["border"], width=1)
-        sep.pack(side="left", fill="y", padx=8, pady=8)
+        sep = tk.Frame(left_nav, bg=COLORS["border_bright"], width=2)
+        sep.pack(side="left", fill="y", padx=10, pady=10)
         
         def add_btn(text, cmd, side="left", parent=None):
             target = parent if parent else left_nav
             b = tk.Button(
                 target, text=text, command=cmd, 
-                bg=COLORS["dark"], fg="white", 
+                bg=COLORS["bg_darker"], fg=COLORS["text_primary"], 
                 bd=0, relief="flat", 
-                padx=16, pady=10,
-                activebackground=COLORS["primary"], 
+                padx=18, pady=12,
+                activebackground=COLORS["bg_medium"],
+                activeforeground=COLORS["primary"],
                 cursor="hand2",
                 font=(FONTS["base"], 10, "bold"),
                 highlightthickness=0
             )
             b.pack(side=side)
             
-            # Hover effect
+            # Hover effect with neon glow
             def on_enter(e):
                 if b["state"] != "disabled":
-                    b.configure(bg=COLORS["primary"])
+                    b.configure(bg=COLORS["bg_medium"], fg=COLORS["primary"])
             
             def on_leave(e):
                 if b["state"] != "disabled":
-                    b.configure(bg=COLORS["dark"])
+                    b.configure(bg=COLORS["bg_darker"], fg=COLORS["text_primary"])
             
             b.bind("<Enter>", on_enter)
             b.bind("<Leave>", on_leave)
@@ -98,7 +101,7 @@ class App(tk.Tk):
         self.b_input = add_btn("📁 Input", self._back_to_input)
         
         # Right side nav
-        right_nav = tk.Frame(self.nav, bg=COLORS["dark"])
+        right_nav = tk.Frame(self.nav, bg=COLORS["bg_darker"])
         right_nav.pack(side="right", fill="y")
         
         self.b_results = add_btn("📊 Results", self._to_results_direct, side="right", parent=right_nav)
@@ -112,11 +115,11 @@ class App(tk.Tk):
         """Enable/disable navigation buttons based on state"""
         self.b_input.configure(
             state=("normal" if input_enabled else "disabled"),
-            fg="white" if input_enabled else COLORS["text_secondary"]
+            fg=COLORS["text_primary"] if input_enabled else COLORS["text_muted"]
         )
         self.b_results.configure(
             state=("normal" if results_enabled else "disabled"),
-            fg="white" if results_enabled else COLORS["text_secondary"]
+            fg=COLORS["text_primary"] if results_enabled else COLORS["text_muted"]
         )
 
     # ---- Screen Navigation -------------------------------------------------
@@ -127,7 +130,8 @@ class App(tk.Tk):
         self.state.update({
             "mode": None, 
             "model_path": None, 
-            "sources": None
+            "sources": None,
+            "input_type": None
         })
         s = HomeScreen(self.container, on_go_next=self._after_home)
         s.pack(fill="both", expand=True)
@@ -165,20 +169,40 @@ class App(tk.Tk):
         else:
             self._to_home()
 
-    def _start_processing(self, sources):
+    def _start_processing(self, sources, input_type):
         """Start processing with selected sources"""
         self.state["sources"] = sources
+        self.state["input_type"] = input_type
+        
         self._clear()
-        s = ProcessingScreen(
-            self.container,
-            mode=self.state["mode"],
-            model_path=self.state["model_path"],
-            sources=self.state["sources"],
-            on_done=self._after_processing,
-            on_cancel=self._to_input
-        )
+        
+        if input_type == "live":
+            # Live camera mode - different screen
+            s = LiveCameraScreen(
+                self.container,
+                mode=self.state["mode"],
+                model_path=self.state["model_path"],
+                on_done=self._after_live_camera,
+                on_cancel=self._to_input
+            )
+        else:
+            # File/folder processing
+            s = ProcessingScreen(
+                self.container,
+                mode=self.state["mode"],
+                model_path=self.state["model_path"],
+                sources=self.state["sources"],
+                input_type=self.state["input_type"],
+                on_done=self._after_processing,
+                on_cancel=self._to_input
+            )
+        
         s.pack(fill="both", expand=True)
         self._set_nav_state(input_enabled=False, results_enabled=False)
+    
+    def _after_live_camera(self):
+        """After live camera ends, return to input"""
+        self._to_input()
 
     def _after_processing(self, out_dir: Path):
         """Called after processing completes"""

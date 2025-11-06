@@ -1,26 +1,53 @@
 COLORS = {
-    "primary": "#5B5FDE",      # Blue-purple
-    "primary_hover": "#4A4EC8",  # Darker on hover
-    "secondary": "#7C3AED",    # Purple accent
-    "secondary_hover": "#6D2FD4",
-    "success": "#10B981",      # Green
-    "success_hover": "#0FA373",
-    "warning": "#F59E0B",      # Orange
-    "warning_hover": "#E08E0A",
-    "danger": "#EF4444",       # Red
-    "danger_hover": "#DC2626",
-    "dark": "#1F2937",         # Dark gray
-    "dark_hover": "#111827",
-    "light": "#F9FAFB",        # Light gray background
-    "white": "#FFFFFF",
-    "bg_gradient_start": "#E0E7FF",
-    "bg_gradient_end": "#C7D2FE",
-    "border": "#E5E7EB",       # Light border
-    "text_primary": "#111827",
-    "text_secondary": "#6B7280",
-    "shadow_light": "#00000010",
-    "shadow_medium": "#00000020",
-    "card_bg": "#FFFFFF",
+    # Neon green theme
+    "primary": "#00FF87",      # Neon green - primary accent
+    "primary_hover": "#00E676",  # Brighter on hover
+    "primary_glow": "#00FF8740",  # Semi-transparent glow
+    
+    "secondary": "#00D9FF",    # Cyan accent
+    "secondary_hover": "#00B8E6",
+    
+    "success": "#00FF87",      # Same as primary (neon green)
+    "success_hover": "#00E676",
+    
+    "warning": "#FFD600",      # Bright yellow
+    "warning_hover": "#FFC400",
+    
+    "danger": "#FF3D71",       # Bright red/pink
+    "danger_hover": "#FF1744",
+    
+    # Dark backgrounds
+    "bg_darkest": "#0A0E1A",   # Darkest - main background
+    "bg_dark": "#141927",      # Dark - secondary background
+    "bg_darker": "#1A1F35",    # Card background
+    "bg_medium": "#242B42",    # Elevated elements
+    
+    # Legacy/compatibility
+    "dark": "#1A1F35",
+    "dark_hover": "#242B42",
+    "light": "#0A0E1A",        # Main background (dark)
+    "white": "#242B42",        # Card bg (dark)
+    
+    # Borders and dividers
+    "border": "#2A3148",       # Subtle border
+    "border_bright": "#3D4968", # Brighter border
+    "border_glow": "#00FF8760", # Green glow border
+    
+    # Text colors
+    "text_primary": "#E8EBF7",   # Light text
+    "text_secondary": "#9BA3C1", # Muted text
+    "text_muted": "#6B7493",     # Very muted
+    
+    # Shadows and glows
+    "shadow_light": "#00000040",
+    "shadow_medium": "#00000060",
+    "shadow_dark": "#00000080",
+    "glow_green": "#00FF8720",
+    "glow_cyan": "#00D9FF20",
+    
+    # Card backgrounds
+    "card_bg": "#1A1F35",
+    "card_elevated": "#242B42",
 }
 
 FONTS = {

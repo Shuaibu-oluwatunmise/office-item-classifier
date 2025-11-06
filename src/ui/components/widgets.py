@@ -2,94 +2,123 @@ import tkinter as tk
 from tkinter import ttk
 from components.styles import COLORS, FONTS, SPACE, RADIUS
 
-# ---- Modern Card with Shadow Effect ----------------------------------------
+# ---- Modern Card with Enhanced Shadow Effect -----------------------------
 
 class Card(tk.Frame):
-    """Enhanced card with rounded appearance and shadow simulation"""
-    def __init__(self, parent, shadow="md", padding=None, **kw):
+    """Enhanced card with dramatic depth effects"""
+    def __init__(self, parent, shadow="md", padding=None, glow=False, **kw):
         bg = kw.pop("bg", COLORS["card_bg"])
         
-        # Outer frame for shadow effect
-        self.outer = tk.Frame(parent, bg=COLORS["light"])
+        # Triple-layer shadow for depth using solid dark colors
+        shadow3 = tk.Frame(parent, bg=COLORS["bg_dark"])
+        shadow2 = tk.Frame(shadow3, bg=COLORS["bg_darker"])
+        shadow1 = tk.Frame(shadow2, bg=COLORS["card_bg"])
+        
+        # Outer frame with optional glow
+        if glow:
+            self.outer = tk.Frame(
+                shadow1, 
+                bg=COLORS["card_bg"],
+                highlightthickness=2,
+                highlightbackground=COLORS["primary"]
+            )
+        else:
+            self.outer = tk.Frame(shadow1, bg=COLORS["bg_darkest"])
+        
         super().__init__(self.outer, bg=bg, highlightthickness=0, bd=0)
         
         # Padding
         pad = padding if padding else SPACE["lg"]
         self.configure(padx=pad, pady=pad)
         
-        # Add subtle border for depth
-        if shadow == "md":
-            self.configure(
-                highlightthickness=1,
-                highlightbackground=COLORS["border"],
-                highlightcolor=COLORS["border"]
-            )
+        # Add border for definition
+        self.configure(
+            highlightthickness=1,
+            highlightbackground=COLORS["border"],
+            highlightcolor=COLORS["border"]
+        )
         
-        # Pack self inside outer frame
-        super().pack(padx=2, pady=2, fill="both", expand=True)
+        # Pack the layers with smaller offsets
+        shadow3.pack(fill="both", expand=True)
+        shadow2.pack(fill="both", expand=True, padx=2, pady=2)
+        shadow1.pack(fill="both", expand=True, padx=1, pady=1)
+        self.outer.pack(fill="both", expand=True, padx=1, pady=1)
+        super().pack(fill="both", expand=True, padx=1, pady=1)
+        
+        # Store references
+        self.shadow3 = shadow3
         
     def pack(self, **kwargs):
-        """Override pack to apply to outer frame"""
-        self.outer.pack(**kwargs)
+        """Override pack to apply to outermost shadow frame"""
+        self.shadow3.pack(**kwargs)
         
     def grid(self, **kwargs):
-        """Override grid to apply to outer frame"""
-        self.outer.grid(**kwargs)
+        """Override grid to apply to outermost shadow frame"""
+        self.shadow3.grid(**kwargs)
 
-# ---- Enhanced Header with Gradient Effect ----------------------------------
+# ---- Enhanced Header with Neon Accent -------------------------------------
 
 def header(parent, text):
-    """Modern header with better typography and subtle gradient"""
-    wrap = tk.Frame(parent, bg=COLORS["dark"], height=60)
+    """Modern header with neon green accent bar"""
+    wrap = tk.Frame(parent, bg=COLORS["bg_darkest"], height=70)
     wrap.pack_propagate(False)
     
-    # Add subtle bottom border
-    border = tk.Frame(wrap, bg=COLORS["primary"], height=3)
+    # Neon green accent bar at bottom
+    border = tk.Frame(wrap, bg=COLORS["primary"], height=4)
     border.pack(side="bottom", fill="x")
     
     lbl = tk.Label(
-        wrap, text=text, bg=COLORS["dark"], fg="white",
-        font=(FONTS["heading"], 20, "bold"), pady=16
+        wrap, text=text, bg=COLORS["bg_darkest"], fg=COLORS["text_primary"],
+        font=(FONTS["heading"], 22, "bold"), pady=16
     )
     lbl.pack()
     return wrap
 
-# ---- Modern Button with Rounded Appearance ---------------------------------
+# ---- Modern Button with Neon Glow Effect ----------------------------------
 
 class Button(tk.Button):
-    """Enhanced button with rounded appearance and smooth hover effects"""
+    """Enhanced button with neon glow and depth effects"""
     def __init__(self, parent, text, command=None, variant="primary", size="md", **kw):
         # Determine colors based on variant
         color_map = {
-            "primary": (COLORS["primary"], COLORS["primary_hover"]),
-            "secondary": (COLORS["secondary"], COLORS["secondary_hover"]),
-            "success": (COLORS["success"], COLORS["success_hover"]),
-            "warning": (COLORS["warning"], COLORS["warning_hover"]),
-            "danger": (COLORS["danger"], COLORS["danger_hover"]),
-            "dark": (COLORS["dark"], COLORS["dark_hover"]),
+            "primary": (COLORS["primary"], COLORS["primary_hover"], COLORS["bg_darkest"]),
+            "secondary": (COLORS["secondary"], COLORS["secondary_hover"], COLORS["bg_darkest"]),
+            "success": (COLORS["success"], COLORS["success_hover"], COLORS["bg_darkest"]),
+            "warning": (COLORS["warning"], COLORS["warning_hover"], COLORS["bg_darkest"]),
+            "danger": (COLORS["danger"], COLORS["danger_hover"], COLORS["bg_darkest"]),
+            "dark": (COLORS["bg_medium"], COLORS["bg_darker"], COLORS["text_primary"]),
         }
         
-        self.default_bg, self.hover_bg = color_map.get(variant, color_map["primary"])
-        self.fg = kw.pop("fg", "white")
+        self.default_bg, self.hover_bg, self.fg = color_map.get(variant, color_map["primary"])
         
         # Size variations
         size_map = {
-            "sm": (10, 10, 6),
-            "md": (11, 14, 8),
-            "lg": (12, 18, 10)
+            "sm": (10, 12, 7),
+            "md": (11, 16, 10),
+            "lg": (12, 20, 12)
         }
         font_size, padx, pady = size_map.get(size, size_map["md"])
         
+        # Create shadow/glow frame
+        self.shadow_frame = tk.Frame(parent, bg=COLORS["bg_darkest"])
+        
         super().__init__(
-            parent, text=text, command=command, cursor="hand2",
+            self.shadow_frame, text=text, command=command, cursor="hand2",
             bg=self.default_bg, fg=self.fg, bd=0, relief="flat",
             activebackground=self.hover_bg, activeforeground=self.fg,
             font=(FONTS["base"], font_size, "bold"), 
             padx=padx, pady=pady,
-            highlightthickness=0
+            highlightthickness=2,
+            highlightbackground=COLORS["border"],
+            highlightcolor=COLORS["border"]
         )
         
-        # Hover effects with visual feedback
+        super().pack(padx=2, pady=2)
+        
+        # Store variant for glow effect
+        self.variant = variant
+        
+        # Hover effects with glow
         self.bind("<Enter>", self._on_enter)
         self.bind("<Leave>", self._on_leave)
         self.bind("<ButtonPress-1>", self._on_press)
@@ -97,16 +126,33 @@ class Button(tk.Button):
         
     def _on_enter(self, e):
         self.configure(bg=self.hover_bg)
+        # Add highlight for primary/success
+        if self.variant in ["primary", "success"]:
+            self.configure(
+                highlightthickness=2,
+                highlightbackground=COLORS["primary"]
+            )
         
     def _on_leave(self, e):
         self.configure(bg=self.default_bg)
+        self.configure(
+            highlightthickness=2,
+            highlightbackground=COLORS["border"]
+        )
         
     def _on_press(self, e):
-        # Slight darken effect on press
         self.configure(relief="sunken")
         
     def _on_release(self, e):
         self.configure(relief="flat")
+    
+    def pack(self, **kwargs):
+        """Override pack to apply to shadow frame"""
+        self.shadow_frame.pack(**kwargs)
+    
+    def grid(self, **kwargs):
+        """Override grid to apply to shadow frame"""
+        self.shadow_frame.grid(**kwargs)
 
 # ---- Icon Button (for compact actions) -------------------------------------
 
@@ -133,13 +179,15 @@ class IconButton(tk.Button):
 # ---- Enhanced Labels -------------------------------------------------------
 
 def label(parent, text, variant="primary", **kw):
-    """Enhanced label with variants"""
+    """Enhanced label with variants for dark theme"""
     color_map = {
         "primary": COLORS["text_primary"],
         "secondary": COLORS["text_secondary"],
-        "white": "white",
+        "muted": COLORS["text_muted"],
+        "white": COLORS["text_primary"],
         "success": COLORS["success"],
-        "danger": COLORS["danger"]
+        "danger": COLORS["danger"],
+        "neon": COLORS["primary"]  # Neon green
     }
     
     fg = kw.pop("fg", color_map.get(variant, color_map["primary"]))
@@ -154,14 +202,16 @@ def label(parent, text, variant="primary", **kw):
     )
 
 def heading(parent, text, level=2, **kw):
-    """Heading component with different levels"""
-    size_map = {1: 18, 2: 16, 3: 14}
+    """Heading component with different levels and neon option"""
+    size_map = {1: 20, 2: 16, 3: 14}
     size = size_map.get(level, 14)
+    
+    fg = kw.get("fg", COLORS["text_primary"])
     
     return tk.Label(
         parent, text=text,
         bg=kw.get("bg", parent.cget("bg")),
-        fg=kw.get("fg", COLORS["text_primary"]),
+        fg=fg,
         font=(FONTS["heading"], size, "bold")
     )
 
