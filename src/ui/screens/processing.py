@@ -1,49 +1,57 @@
-# src/ui/screens/processing.py
-import threading
 import tkinter as tk
-from tkinter import ttk, messagebox
+from tkinter import ttk
+from threading import Thread
 from pathlib import Path
-from components.widgets import header, Button, card
-from components.styles import SPACE
-from utils.handlers import classify_path, detect_path
 
-class ProcessingScreen(ttk.Frame):
-    def __init__(self, master, mode: str, input_path: str, go_back, go_results):
-        super().__init__(master, style="TFrame")
+from components.widgets import header, Card, Button, label, spacer
+from components.styles import COLORS, SPACE
+from utils.handlers import run_inference
+
+class ProcessingScreen(tk.Frame):
+    def __init__(self, parent, mode, model_path, sources, on_done, on_cancel):
+        """
+        on_done(output_dir: Path) -> go show results
+        """
+        super().__init__(parent, bg=COLORS["light"])
         self.mode = mode
-        self.input_path = Path(input_path)
-        self.go_back = go_back
-        self.go_results = go_results
+        self.model_path = model_path
+        self.sources = sources
+        self.on_done = on_done
+        self.on_cancel = on_cancel
 
-        title = "Classification" if mode == "classification" else "Detection"
-        h = header(self, f"{title} – Processing", f"Running model on: {self.input_path}")
-        h.grid(row=0, column=0, sticky="ew", padx=SPACE.lg, pady=(SPACE.lg, SPACE.md))
+        header(self, "Processing...").pack(fill="x")
 
-        self.card = card(self)
-        self.card.grid(row=1, column=0, sticky="nsew", padx=SPACE.lg, pady=SPACE.lg)
-        self.info = ttk.Label(self.card, text="Starting...", style="Sub.TLabel")
-        self.info.grid(row=0, column=0, sticky="w")
+        wrap = Card(self, bg=COLORS["white"])
+        wrap.pack(padx=SPACE["xl"], pady=SPACE["xl"], fill="x")
 
-        nav = ttk.Frame(self, style="TFrame", padding=SPACE.lg)
-        nav.grid(row=2, column=0, sticky="ew")
-        Button(nav, text="Cancel", command=self.go_back).grid(row=0, column=0, sticky="w")
+        label(wrap, f"Running {mode} with model:\n{model_path}").pack(anchor="w")
+        spacer(wrap, 12).pack()
 
-        self.after(100, self._kickoff)
+        self.prog = ttk.Progressbar(wrap, mode="indeterminate", length=400)
+        self.prog.pack(pady=(4,12))
+        self.prog.start(12)
 
-    def _kickoff(self):
-        t = threading.Thread(target=self._do_work, daemon=True)
-        t.start()
+        self.status = label(wrap, "Please wait...")
+        self.status.pack(anchor="w")
 
-    def _do_work(self):
+        spacer(wrap, 20).pack()
+        Button(wrap, text="Cancel", command=self._cancel, bg=COLORS["danger"]).pack(anchor="e")
+
+        # Start background job
+        Thread(target=self._worker, daemon=True).start()
+
+    def _worker(self):
         try:
-            if self.mode == "classification":
-                out_dir, saved = classify_path(self.input_path)
-            else:
-                out_dir, saved = detect_path(self.input_path)
-            self.after(0, lambda: self._done(out_dir, saved))
+            out_dir = run_inference(self.mode, self.model_path, self.sources)
+            self.after(0, lambda: self._done(out_dir))
         except Exception as e:
-            self.after(0, lambda: messagebox.showerror("Error", str(e)))
+            self.after(0, lambda: self.status.config(text=f"Error: {e}"))
+            self.after(3000, self.on_cancel)
 
-    def _done(self, out_dir, saved):
-        self.info.configure(text=f"Finished. Saved {len(saved)} file(s) to:\n{out_dir}")
-        self.go_results(mode=self.mode, output_dir=str(out_dir), files=[str(p) for p in saved])
+    def _done(self, out_dir: Path):
+        self.prog.stop()
+        self.on_done(out_dir)
+
+    def _cancel(self):
+        # We can't easily stop YOLO mid-run here, so just return to previous screen.
+        self.on_cancel()

@@ -1,35 +1,25 @@
-# src/ui/components/styles.py
-from dataclasses import dataclass
-
 COLORS = {
-    "bg": "#0f172a",          # slate-900
-    "panel": "#111827",       # gray-900
-    "muted": "#1f2937",       # gray-800
-    "accent": "#6366f1",      # indigo-500
-    "accent_hover": "#4f46e5",# indigo-600
-    "text": "#e5e7eb",        # gray-200
-    "subtext": "#9ca3af",     # gray-400
-    "success": "#10b981",     # emerald-500
-    "danger": "#ef4444",      # red-500
-    "warn": "#f59e0b",        # amber-500
-    "border": "#1f2937",
+    "primary": "#5B5FDE",      # Blue-purple
+    "secondary": "#7C3AED",    # Purple accent
+    "success": "#10B981",      # Green
+    "warning": "#F59E0B",      # Orange
+    "danger": "#EF4444",       # Red
+    "dark": "#1F2937",         # Dark gray
+    "light": "#F9FAFB",        # Light gray
+    "white": "#FFFFFF",
+    "bg_gradient_start": "#E0E7FF",
+    "bg_gradient_end": "#C7D2FE"
 }
 
-@dataclass
-class Spacing:
-    xs: int = 4
-    sm: int = 8
-    md: int = 12
-    lg: int = 16
-    xl: int = 24
-    xxl: int = 32
-
-SPACE = Spacing()
-
 FONTS = {
-    "h1": ("Segoe UI", 18, "bold"),
-    "h2": ("Segoe UI", 14, "bold"),
-    "p":  ("Segoe UI", 11, "normal"),
-    "btn":("Segoe UI", 11, "bold"),
-    "mono":("Consolas", 10, "normal"),
+    "base": "Segoe UI",
+    "heading": "Segoe UI Semibold"
+}
+
+SPACE = {
+    "xs": 4,
+    "sm": 8,
+    "md": 12,
+    "lg": 20,
+    "xl": 30
 }

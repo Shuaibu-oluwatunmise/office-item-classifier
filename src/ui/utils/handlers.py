@@ -1,128 +1,117 @@
-# src/ui/utils/handlers.py
-import os, sys, time, subprocess
 from pathlib import Path
 from datetime import datetime
-from typing import List, Tuple
-from PIL import Image, ImageDraw, ImageFont
+from typing import Dict, List, Tuple
+import shutil
+import glob
 import cv2
+
+# Ultralytics
 from ultralytics import YOLO
 
-# === Model paths from your project ===
-CLS_MODEL = Path("runs/classify/yolov8n_cls_V3/weights/best.pt")
-DET_MODEL = Path("runs/detect/yolov8n_detect_V2/weights/best.pt")
+BASE = Path.cwd()
+RUNS = BASE / "runs"
+UI_RESULTS = RUNS / "ui_results"
+UI_RESULTS.mkdir(parents=True, exist_ok=True)
 
-# fallbacks
-def _font(size=28):
-    try:
-        return ImageFont.truetype("arial.ttf", size)
-    except:
-        return ImageFont.load_default()
+IMAGE_EXTS = (".jpg", ".jpeg", ".png", ".bmp", ".webp")
 
-def _ensure_out(mode: str):
-    ts = datetime.now().strftime("%Y%m%d_%H%M%S")
-    out_dir = Path("runs") / "ui_results" / mode / ts
+def discover_models() -> Dict[str, List[Tuple[str, Path]]]:
+    """
+    Returns:
+      {
+        "classification": [(run_name, path_to_best), ...],
+        "detection": [(run_name, path_to_best), ...]
+      }
+    """
+    out = {"classification": [], "detection": []}
+    classify_root = RUNS / "classify"
+    detect_root = RUNS / "detect"
+
+    if classify_root.exists():
+        for p in (classify_root.glob("*/weights/best.pt")):
+            out["classification"].append((p.parents[1].name, p))
+
+    if detect_root.exists():
+        for p in (detect_root.glob("*/weights/best.pt")):
+            out["detection"].append((p.parents[1].name, p))
+
+    # Sort for consistent dropdown order
+    out["classification"].sort(key=lambda x: x[0])
+    out["detection"].sort(key=lambda x: x[0])
+    return out
+
+def _timestamp() -> str:
+    return datetime.now().strftime("%Y%m%d_%H%M%S")
+
+def _ensure_iter(paths) -> List[Path]:
+    if paths is None:
+        return []
+    if isinstance(paths, (str, Path)):
+        return [Path(paths)]
+    return [Path(p) for p in paths]
+
+def expand_sources(sources) -> List[Path]:
+    """Expand file/dir selection into a flat list of image files."""
+    files: List[Path] = []
+    for src in _ensure_iter(sources):
+        if src.is_dir():
+            for ext in IMAGE_EXTS:
+                files.extend(src.rglob(f"*{ext}"))
+        elif src.suffix.lower() in IMAGE_EXTS:
+            files.append(src)
+    # Deduplicate, keep relative order-ish
+    seen = set()
+    uniq = []
+    for f in files:
+        if f not in seen:
+            uniq.append(f)
+            seen.add(f)
+    return uniq
+
+def run_inference(mode: str, model_path: Path, sources) -> Path:
+    """
+    Runs inference over given sources and saves ONLY processed images
+    into runs/ui_results/<mode>/<timestamp> preserving original filenames.
+    Returns the created output directory.
+    """
+    files = expand_sources(sources)
+    out_dir = UI_RESULTS / mode / _timestamp()
     out_dir.mkdir(parents=True, exist_ok=True)
+
+    model = YOLO(str(model_path))
+
+    for fp in files:
+        # Predict single image
+        results = model.predict(source=str(fp), verbose=False)
+        res = results[0]
+
+        # For detection/seg pose -> res.plot() returns annotated ndarray (BGR)
+        # For classification -> res.plot() returns image with top-1 text overlay.
+        img_annot = res.plot()
+        save_path = out_dir / fp.name
+        # cv2 expects BGR ndarray
+        cv2.imwrite(str(save_path), img_annot)
+
     return out_dir
 
-IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".bmp", ".webp"}
-VIDEO_EXTS = {".mp4", ".avi", ".mov", ".mkv", ".wmv"}
+def list_result_images(mode: str, result_dir: Path = None) -> List[Path]:
+    """Return list of image paths from the latest (or given) result dir for mode."""
+    base = UI_RESULTS / mode
+    if result_dir is None:
+        if not base.exists():
+            return []
+        subdirs = [p for p in base.iterdir() if p.is_dir()]
+        if not subdirs:
+            return []
+        # Latest by name (timestamp)
+        result_dir = sorted(subdirs)[-1]
 
-def _iter_media(path: Path) -> Tuple[List[Path], List[Path]]:
-    if path.is_file():
-        return ([path], []) if path.suffix.lower() in IMAGE_EXTS else ([], [path])
-    imgs = [p for p in path.rglob("*") if p.suffix.lower() in IMAGE_EXTS]
-    vids = [p for p in path.rglob("*") if p.suffix.lower() in VIDEO_EXTS]
-    return imgs, vids
+    imgs: List[Path] = []
+    for ext in IMAGE_EXTS:
+        imgs.extend(sorted(result_dir.glob(f"*{ext}")))
+    return imgs
 
-# ---------- Classification (file/folder) ----------
-def classify_path(input_path: Path, conf: float = 0.30):
-    model = YOLO(str(CLS_MODEL))
-    out_dir = _ensure_out("classification")
-    font = _font(40)
-
-    imgs, vids = _iter_media(input_path)
-    saved = []
-
-    # Images
-    for img_p in imgs:
-        im = Image.open(img_p).convert("RGB")
-        res = model.predict(im, verbose=False)[0]
-        label = ""
-        if res.probs is not None and float(res.probs.top1conf) >= conf:
-            name = model.names[int(res.probs.top1)]
-            label = f"{name}  {float(res.probs.top1conf)*100:.1f}%"
-        draw = ImageDraw.Draw(im, "RGBA")
-        if label:
-            bbox = draw.textbbox((0,0), label, font=font)
-            pad=12
-            draw.rectangle([ (10,10), (10+bbox[2]-bbox[0]+pad, 10+bbox[3]-bbox[1]+pad) ],
-                           fill=(0,0,0,180))
-            draw.text((16,14), label, fill=(255,255,255), font=font)
-        out_p = out_dir / img_p.name
-        im.save(out_p)
-        saved.append(out_p)
-
-    # Videos (simple overlay on each frame)
-    for vid_p in vids:
-        cap = cv2.VideoCapture(str(vid_p))
-        fps = cap.get(cv2.CAP_PROP_FPS) or 25
-        w, h = int(cap.get(3)), int(cap.get(4))
-        out_p = out_dir / f"{vid_p.stem}_classified.mp4"
-        writer = cv2.VideoWriter(str(out_p), cv2.VideoWriter_fourcc(*"mp4v"), fps, (w, h))
-        while True:
-            ok, frame = cap.read()
-            if not ok: break
-            res = model.predict(frame, verbose=False)[0]
-            if res.probs is not None and float(res.probs.top1conf) >= conf:
-                name = model.names[int(res.probs.top1)]
-                label = f"{name}  {float(res.probs.top1conf)*100:.1f}%"
-                cv2.rectangle(frame, (10,10), (450,70), (0,0,0), -1)
-                cv2.putText(frame, label, (20,55), cv2.FONT_HERSHEY_SIMPLEX, 1.2, (255,255,255), 3)
-            writer.write(frame)
-        writer.release(); cap.release()
-        saved.append(out_p)
-
-    return out_dir, saved
-
-# ---------- Detection (file/folder) ----------
-def detect_path(input_path: Path, conf: float = 0.25, iou: float = 0.45):
-    model = YOLO(str(DET_MODEL))
-    out_dir = _ensure_out("detection")
-    imgs, vids = _iter_media(input_path)
-    saved = []
-
-    # Images
-    for img_p in imgs:
-        im = cv2.imread(str(img_p))
-        if im is None: continue
-        res = model(im, conf=conf, iou=iou, verbose=False)[0]
-        annotated = im.copy()
-        names = model.names
-        if res.boxes is not None and len(res.boxes) > 0:
-            for b in res.boxes:
-                x1,y1,x2,y2 = map(int, b.xyxy[0].cpu().numpy())
-                cls = int(b.cls[0].cpu().numpy())
-                cf = float(b.conf[0].cpu().numpy())
-                color = (99,102,241)  # indigo-ish
-                cv2.rectangle(annotated, (x1,y1), (x2,y2), color, 3)
-                label = f"{names[cls]} {cf*100:.1f}%"
-                (tw,th), base = cv2.getTextSize(label, cv2.FONT_HERSHEY_SIMPLEX, 0.8, 2)
-                cv2.rectangle(annotated, (x1,y1-th-10), (x1+tw+10,y1), color, -1)
-                cv2.putText(annotated, label, (x1+5,y1-5), cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255,255,255), 2)
-        out_p = out_dir / img_p.name
-        cv2.imwrite(str(out_p), annotated)
-        saved.append(out_p)
-
-    # (Optional) videos – can be added similarly; keeping lean for reliability now
-    return out_dir, saved
-
-# ---------- Live feed ----------
-def start_live_classification():
-    # Spawns your existing live script
-    script = Path("src/Classification/live_inference.py")
-    return subprocess.Popen([sys.executable, str(script)])
-
-def start_live_detection():
-    # Spawns your existing threaded/recording app
-    script = Path("src/Detection/Live_Feed.py")
-    return subprocess.Popen([sys.executable, str(script)])
+def copy_results_to(dest_dir: Path, images: List[Path]) -> None:
+    dest_dir.mkdir(parents=True, exist_ok=True)
+    for img in images:
+        shutil.copy2(str(img), str(dest_dir / img.name))

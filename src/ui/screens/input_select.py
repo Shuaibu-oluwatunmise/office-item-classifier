@@ -1,72 +1,64 @@
-# src/ui/screens/input_select.py
 import tkinter as tk
-from tkinter import ttk, filedialog, messagebox
-from components.widgets import header, Button, card
-from components.styles import SPACE
-from utils.handlers import start_live_classification, start_live_detection
+from tkinter import filedialog, messagebox
+from pathlib import Path
 
-class InputSelectScreen(ttk.Frame):
-    def __init__(self, master, mode: str, go_back, go_process):
-        super().__init__(master, style="TFrame")
+from components.widgets import header, Card, Button, label, spacer
+from components.styles import COLORS, SPACE
+
+class InputSelectScreen(tk.Frame):
+    def __init__(self, parent, mode, model_path, on_process, on_back):
+        """
+        on_process(sources) -> start processing
+        """
+        super().__init__(parent, bg=COLORS["light"])
         self.mode = mode
-        self.go_back = go_back
-        self.go_process = go_process
+        self.model_path = model_path
+        self.on_process = on_process
+        self.on_back = on_back
+        self.sources = []  # list[Path]
 
-        title = "Classification" if mode == "classification" else "Detection"
-        h = header(self, f"{title} – Pick input", "Choose files/folder or start live camera")
-        h.grid(row=0, column=0, sticky="ew", padx=SPACE.lg, pady=(SPACE.lg, SPACE.md))
+        title = f"{mode.title()} — Select Input"
+        header(self, title).pack(fill="x")
 
-        wrap = card(self)
-        wrap.grid(row=1, column=0, sticky="nsew", padx=SPACE.lg, pady=SPACE.lg)
-        wrap.columnconfigure(0, weight=1)
-        wrap.columnconfigure(1, weight=1)
+        wrap = Card(self, bg=COLORS["white"])
+        wrap.pack(padx=SPACE["xl"], pady=SPACE["xl"], fill="x")
 
-        # Files/folder
-        left = ttk.Frame(wrap, style="Muted.TFrame", padding=SPACE.lg)
-        left.grid(row=0, column=0, sticky="nsew", padx=(0, SPACE.lg))
-        ttk.Label(left, text="Process Files", style="H2.TLabel").grid(row=0, column=0, sticky="w")
-        ttk.Label(left, text="Select an image/video or a folder containing media.", style="Sub.TLabel").grid(row=1, column=0, sticky="w", pady=(SPACE.xs, SPACE.lg))
-        Button(left, text="Choose File", command=self._choose_file).grid(row=2, column=0, sticky="w", pady=(0, SPACE.sm))
-        Button(left, text="Choose Folder", command=self._choose_folder).grid(row=3, column=0, sticky="w")
-        self.sel_label = ttk.Label(left, text="", style="Sub.TLabel")
-        self.sel_label.grid(row=4, column=0, sticky="w", pady=(SPACE.md,0))
-        Button(left, text="Process", kind="primary", command=self._process).grid(row=5, column=0, sticky="w", pady=(SPACE.lg,0))
+        # File/folder row
+        row = tk.Frame(wrap, bg=wrap.cget("bg"))
+        row.pack(fill="x")
+        Button(row, text="Choose File(s)", command=self._choose_files).pack(side="left")
+        Button(row, text="Choose Folder", command=self._choose_folder, bg=COLORS["dark"]).pack(side="left", padx=8)
 
-        # Live feed
-        right = ttk.Frame(wrap, style="Muted.TFrame", padding=SPACE.lg)
-        right.grid(row=0, column=1, sticky="nsew")
-        ttk.Label(right, text="Live Camera", style="H2.TLabel").grid(row=0, column=0, sticky="w")
-        ttk.Label(right, text="Launch the live stream window with predictions.", style="Sub.TLabel").grid(row=1, column=0, sticky="w", pady=(SPACE.xs, SPACE.lg))
-        Button(right, text="Start Live Feed", command=self._start_live).grid(row=2, column=0, sticky="w")
+        # (Live feed kept for future; for now we focus on file/folder)
+        # Button(row, text="Live Camera (beta)", command=self._live_camera, bg=COLORS["warning"]).pack(side="left", padx=8)
 
-        # Nav
-        nav = ttk.Frame(self, style="TFrame", padding=SPACE.lg)
-        nav.grid(row=2, column=0, sticky="ew")
-        Button(nav, text="Back", command=self.go_back).grid(row=0, column=0, sticky="w")
+        spacer(wrap, 10).pack()
+        self.sel_lbl = label(wrap, "No input selected", fg=COLORS["dark"])
+        self.sel_lbl.pack(anchor="w")
 
-        self._selected_path = None
+        spacer(wrap, 20).pack()
+        actions = tk.Frame(wrap, bg=wrap.cget("bg"))
+        actions.pack(fill="x")
+        Button(actions, text="← Back", command=self.on_back, bg=COLORS["dark"]).pack(side="left")
+        Button(actions, text="Process →", command=self._process, bg=COLORS["success"]).pack(side="right")
 
-    def _choose_file(self):
-        p = filedialog.askopenfilename(title="Select image/video")
-        if p:
-            self._selected_path = p
-            self.sel_label.configure(text=p)
+    def _choose_files(self):
+        paths = filedialog.askopenfilenames(
+            title="Select image(s)",
+            filetypes=[("Images", "*.jpg *.jpeg *.png *.bmp *.webp")]
+        )
+        if paths:
+            self.sources = [Path(p) for p in paths]
+            self.sel_lbl.config(text=f"Selected {len(self.sources)} file(s).")
 
     def _choose_folder(self):
-        p = filedialog.askdirectory(title="Select folder")
+        p = filedialog.askdirectory(title="Select folder of images")
         if p:
-            self._selected_path = p
-            self.sel_label.configure(text=p)
+            self.sources = [Path(p)]
+            self.sel_lbl.config(text=f"Selected folder: {p}")
 
     def _process(self):
-        if not self._selected_path:
-            messagebox.showwarning("No selection", "Please choose a file or folder.")
+        if not self.sources:
+            messagebox.showerror("No input", "Please select file(s) or a folder first.")
             return
-        self.go_process(mode=self.mode, input_path=self._selected_path)
-
-    def _start_live(self):
-        # Spawn your existing live scripts
-        if self.mode == "classification":
-            start_live_classification()
-        else:
-            start_live_detection()
+        self.on_process(self.sources)
