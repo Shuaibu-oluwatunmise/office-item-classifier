@@ -1,3 +1,4 @@
+#classification/live_inference.py
 import cv2
 from ultralytics import YOLO
 from PIL import ImageFont, ImageDraw, Image
