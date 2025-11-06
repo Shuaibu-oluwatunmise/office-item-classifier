@@ -36,7 +36,7 @@ def main():
         batch=BATCH_SIZE,
         device=device,
         project="runs/classify",
-        name="yolov8n_cls_V3",
+        name="yolov8n_cls_V4",
         patience=PATIENCE,
         workers=12,
         verbose=True,
