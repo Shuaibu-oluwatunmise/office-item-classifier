@@ -153,6 +153,15 @@ python3.12 -m venv venv
 # Windows:
 venv\Scripts\activate
 
+# Windows (PowerShell):
+# If you get the error:
+# "running scripts is disabled on this system"
+# Run this (NO admin required):
+#   Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
+#
+# Then activate:
+venv\Scripts\Activate.ps1
+
 # Linux/Mac:
 source venv/bin/activate
 ```
