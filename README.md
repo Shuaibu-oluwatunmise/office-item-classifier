@@ -51,8 +51,8 @@ Bottle, Chair, Keyboard, Monitor, Mouse, Mug, Notebook, Pen, Printer, Stapler
 **Key Achievement:** 99.949% classification accuracy with only 1 error out of 1,961 validation samples.
 
 ## Best Models
--**Classification**: Version 4 (V4)
--**Detection**: Version 5 (V5) [version 4 is good as well]
+-Classification: Version 4 (V4) |
+-Detection**: Version 5 (V5) [version 4 is good as well] |
 ---
 
 ## ✨ Features
