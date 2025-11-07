@@ -143,7 +143,11 @@ cd office-item-classifier
 
 ```bash
 # Create virtual environment with Python 3.12.8
-python -m venv venv
+# Windows:
+py -3.12 -m venv venv
+
+# Linux/Mac:
+python3.12 -m venv venv
 
 # Activate virtual environment
 # Windows:
