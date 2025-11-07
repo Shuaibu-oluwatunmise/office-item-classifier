@@ -34,7 +34,7 @@
 |----------|------|
 | 📊 **Dataset** | [OneDrive - Training/Validation/Test Images](https://livemdxac-my.sharepoint.com/:f:/g/personal/os439_live_mdx_ac_uk/EpnYRvlNasNNgDrTMkt8GoMBeEvE0WEpRU91_VP6k5VISg) |
 | 📄 **Final Report** | [PDF Report](docs/Report/FinalSubmission/PDE3802Assessment1Report.pdf) |
-| 🎥 **Video Walkthrough** | [2-Minute Code Demo](#) *(Coming Soon)* |
+| 🎥 **Video Walkthrough** | [2-Minute Code Demo](https://www.play.mdx.ac.uk/media/Office+Item+Video/1_jxwh2aqo) 
 | 💻 **Source Code Details** | [SOURCE_CODE.md](src/SOURCE_CODE.md) |
 
 ---
