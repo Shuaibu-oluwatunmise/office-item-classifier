@@ -710,7 +710,7 @@ python src/classification/train.py \
     --name yolov8n_cls_V5
 ```
 
-**Expected Training Time:** ~3-4 hours on RTX 50 series
+**Expected Training Time:** ~0.5 hours on RTX 50 series
 
 ### Detection Training
 
@@ -724,7 +724,7 @@ python src/detection/train.py \
     --name yolov8n_detect_V6
 ```
 
-**Expected Training Time:** ~6-8 hours on RTX 50 series
+**Expected Training Time:** ~0.5 - 1 hours on RTX 50 series
 
 ### Training Outputs
 
