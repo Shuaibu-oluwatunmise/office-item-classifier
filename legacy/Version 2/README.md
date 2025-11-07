@@ -13,7 +13,7 @@
 
 An advanced image classification system that recognizes common office items from single images or live camera feed. This project implements and compares **5 deep learning models** (ResNet18 + 4 YOLO variants) to achieve near-perfect classification accuracy on 9 office object categories.
 
-**Achievement:** 99.85% test accuracy with production-ready performance
+**Achievement:** 99.85% test accuracy with Deployment-ready performance
 
 ---
 
@@ -248,7 +248,7 @@ python src/camera_inference.py
 ✅ **99.88% Validation Accuracy** (ResNet18)  
 ✅ **6 Perfect Classes** (100% F1-Score)  
 ✅ **Zero Overfitting** (Val ≈ Test performance)  
-✅ **Production Ready** (Robust generalization)  
+✅ **Deployment Ready** (Robust generalization)  
 ✅ **Fast Training** (115 min with 20-core CPU)  
 ✅ **Balanced Dataset** (2,500 images per class)  
 
@@ -286,7 +286,7 @@ python src/camera_inference.py
 📊 **Comprehensive Analysis:** Confusion matrices, per-class metrics  
 🏆 **Model Competition:** Systematic comparison framework  
 🎥 **Real-time Inference:** Live webcam classification  
-📦 **Production Ready:** Robust, generalizable models  
+📦 **Deployment Ready:** Robust, generalizable models  
 
 ---
 

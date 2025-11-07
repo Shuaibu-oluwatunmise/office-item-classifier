@@ -454,7 +454,7 @@ python src/camera_inference.py
 - ResNet test accuracy: **99.85%** ✅
 - Smart training with skip logic
 - Ultimate model competition framework
-- Production-ready performance
+- Deployment-ready performance
 
 ---
 

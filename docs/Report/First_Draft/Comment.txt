@@ -1,5 +1,14 @@
 Feedback from the Lecturer
 
+Hi,
+
+I read your report. It has a list of tasks and required skills. It makes good use of lists. 
+It is consistent in terms of fonts and margins. It involves flow charts that explains the process. 
+It involves hardware required with alternatives and comparison. It has references and they are cited in the report. 
+
+It is a good report. I think you can also draw a diagram that shows where the robotic arm is located and shows where the objects are located (on the ground or on a table).  
+Such a diagram would be good for understanding. 
+
 Hi again, Your report is 3600 words, which exceeds the 3000-word limit. I think you should shorten it a bit. 
 
 From: Tolga
