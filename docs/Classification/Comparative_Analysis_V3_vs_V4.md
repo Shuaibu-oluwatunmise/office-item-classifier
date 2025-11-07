@@ -123,7 +123,7 @@ V4 achieved **96% error reduction** over V3 through **dataset doubling** (~1,950
 
 ### Recommendation
 
-**Use V4 for D.** The model proves that **dataset quality and size** are more important than architecture complexity for this task.
+**Use V4 for Deployment.** The model proves that **dataset quality and size** are more important than architecture complexity for this task.
 
 **Future work:** Continue expanding dataset for even better generalization.
 
