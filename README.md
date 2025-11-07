@@ -217,6 +217,7 @@ pip install -r requirements.txt
 ### Launch the UI (Recommended for Testing)
 
 ```bash
+#Make sure you are in your venv
 python src/ui/app_main.py
 ```
 
@@ -239,37 +240,39 @@ python src/ui/app_main.py
 ### 1. Single Image Classification
 
 ```bash
-python src/classification/file_inference.py --image my_data/IMG-20251105-WA0007.jpg --model runs/classify/yolov8n_cls_V4/weights/best.pt
+python src/classification/file_inference.py "-my_data/IMG-20251105-WA0007.jpg"
 ```
 
 **Expected Output:**
 ```
-Loading model from: runs/classify/yolov8n_cls_V4/weights/best.pt
-Processing: my_data/IMG-20251105-WA0007.jpg
-Predicted Class: mouse
-Confidence: 99.87%
+📦 Loading model from: runs\classify\yolov8n_cls_V4\weights\best.pt
+🖼️ Processing single image...
+✅ Saved annotated image to: my_data\results
 ```
 
 ### 2. Batch Folder Classification
 
 ```bash
-python src/classification/file_inference.py --folder my_data/ --model runs/classify/yolov8n_cls_V4/weights/best.pt
+python src/classification/file_inference.py "-my_data"
 ```
 
 **Expected Output:**
 ```
-Processing 8 images from: my_data/
-[1/8] IMG-20251105-WA0007.jpg -> mouse (99.87%)
-[2/8] IMG-20251105-WA0008.jpg -> keyboard (98.45%)
-[3/8] IMG-20251105-WA0009.jpg -> monitor (99.12%)
-...
-Summary: 8/8 processed successfully
+📦 Loading model from: runs\classify\yolov8n_cls_V4\weights\best.pt
+
+🖼️ Processing 8 image(s)...
+Images: 100%|████████████████████████████████████████████████████████████████| 8/8 [00:00<00:00, 14.95img/s]
+
+🎞️ Processing 1 video(s)...
+Videos: 100%|████████████████████████████████████████████████████████████████| 1/1 [00:10<00:00, 10.63s/vid]
+
+✅ All results saved to: my_data\results
 ```
 
 ### 3. Live Camera Classification
 
 ```bash
-python src/classification/live_inference.py --model runs/classify/yolov8n_cls_V4/weights/best.pt
+python src/classification/live_inference.py
 ```
 
 **Expected Output:**
@@ -280,31 +283,51 @@ python src/classification/live_inference.py --model runs/classify/yolov8n_cls_V4
 ### 4. Video Processing
 
 ```bash
-python src/classification/file_inference.py --video my_data/VID-20251105-WA0001.mp4 --model runs/classify/yolov8n_cls_V4/weights/best.pt
+python src/classification/file_inference.py "-my_data/VID-20251105-WA0001.mp4"
 ```
 
 **Expected Output:**
-- Processed video saved to `output/`
+📦 Loading model from: runs\classify\yolov8n_cls_V4\weights\best.pt
+🎞️ Processing single video...
+VID-20251105-WA0001.mp4: 100%|█████████████████████████████████████████| 990/990 [00:10<00:00, 93.85frame/s]
+✅ Saved annotated video to: my_data\results\VID-20251105-WA0001_classified.mp4
 - Frame-by-frame classification results
 
 ### 5. Object Detection (Multiple Items)
 
 ```bash
-python src/detection/File_Inference.py --image my_data/IMG-20251105-WA0007.jpg --model runs/detect/yolov8n_detect_V5/weights/best.pt
+python src/detection/File_Inference.py
 ```
 
 **Expected Output:**
 ```
-Detected 3 objects:
-  - mouse (95.2%) at [x1, y1, x2, y2]
-  - keyboard (98.7%) at [x1, y1, x2, y2]
-  - monitor (96.4%) at [x1, y1, x2, y2]
+Loading model from: runs/detect/yolov8n_detect_V5/weights/best.pt
+Model loaded with 10 classes: ['bottle', 'chair', 'keyboard', 'monitor', 'mouse', 'mug', 'notebook', 'pen', 'printer', 'stapler']
+Found 8 images in 'my_data'
+Processing 1/8: IMG-20251105-WA0007.jpg
+  Detected 2 objects
+Processing 2/8: IMG-20251105-WA0008.jpg
+  Detected 1 objects
+Processing 3/8: IMG-20251105-WA0009.jpg
+  Detected 1 objects
+Processing 4/8: IMG-20251105-WA0010.jpg
+  Detected 1 objects
+Processing 5/8: IMG-20251105-WA0011.jpg
+  Detected 1 objects
+Processing 6/8: IMG-20251105-WA0012.jpg
+  Detected 3 objects
+Processing 7/8: IMG-20251105-WA0013.jpg
+  Detected 1 objects
+Processing 8/8: IMG-20251105-WA0014.jpg
+  Detected 1 objects
+
+Processing complete! Annotated images saved to 'detection_results'
 ```
 
 ### 6. Live Detection Feed
 
 ```bash
-python src/detection/Live_Feed.py --model runs/detect/yolov8n_detect_V5/weights/best.pt
+python src/detection/Live_Feed.py
 ```
 
 ---
@@ -483,7 +506,7 @@ office-item-classifier/
 
 ### Overview
 
-**Total Images:** ~50,000+ images across training/validation/test sets
+**Total Images:** ~30,000+ images across training/validation/test sets
 
 **Classes (10):** Bottle, Chair, Keyboard, Monitor, Mouse, Mug, Notebook, Pen, Printer, Stapler
 
@@ -494,7 +517,7 @@ office-item-classifier/
 ```
 dataset/
 ├── classification/
-│   ├── train/          # ~3,600 images per class
+│   ├── train/          # 2,600 images per class
 │   ├── val/            # ~196 images per class
 │   └── test/           # ~196 images per class
 │
@@ -530,7 +553,7 @@ dataset/
 - 13,616 → 22,500 images
 
 **V3 → V4 (Classification):**
-- Dataset doubled (~1,950 → ~3,900)
+- Dataset doubled (~13K → ~26K instances)
 - Mouse class representation improved
 - Error rate: 9.2% → 0.05%
 
@@ -539,7 +562,6 @@ dataset/
 - Better class coverage
 - Background confusion reduced
 
-📄 **Full Dataset Card:** [DATASET.md](DATASET.md)
 
 ---
 
@@ -633,7 +655,7 @@ SyntaxError or ImportError
 ```bash
 python --version  # Should show 3.12.8
 # Create venv with correct version
-python3.12 -m venv venv
+py -3.12 -m venv venv
 ```
 
 #### 6. Tkinter Not Found (Linux)
