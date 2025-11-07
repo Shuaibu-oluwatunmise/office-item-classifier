@@ -135,7 +135,7 @@ python --version
 ### Step 1: Clone the Repository
 
 ```bash
-git clone https://github.com/YOUR_USERNAME/office-item-classifier.git
+git clone https://github.com/Shuaibu-oluwatunmise/office-item-classifier.git
 cd office-item-classifier
 ```
 
