@@ -220,7 +220,7 @@ pip install -r requirements.txt
 ### Launch the UI (Recommended for Testing)
 
 ```bash
-src/ui/screens/live_camera.py - Line 141: self.cap = cv2.VideoCapture(1) 
+src/ui/screens/live_camera.py - Line 141: self.cap = cv2.VideoCapture(1) #change the index to your camera default index
 ```
        
 ```bash
