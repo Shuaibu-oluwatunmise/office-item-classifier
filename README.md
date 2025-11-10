@@ -220,6 +220,10 @@ pip install -r requirements.txt
 ### Launch the UI (Recommended for Testing)
 
 ```bash
+src/ui/screens/live_camera.py - Line 141: self.cap = cv2.VideoCapture(1) 
+```
+       
+```bash
 #Make sure you are in your venv
 python src/ui/app_main.py
 ```
