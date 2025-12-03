@@ -1,0 +1,58 @@
+{
+    "timestamp": "20251202_202352",
+    "checkerboard_size": [
+        9,
+        6
+    ],
+    "square_size_mm": 24.0,
+    "num_images": 20,
+    "reprojection_error_pixels": 0.19717076858410598,
+    "camera_matrix": [
+        [
+            888.0265172956999,
+            0.0,
+            639.4063135490871
+        ],
+        [
+            0.0,
+            884.0984394681841,
+            354.6648324151391
+        ],
+        [
+            0.0,
+            0.0,
+            1.0
+        ]
+    ],
+    "distortion_coefficients": [
+        [
+            0.09450041549652369,
+            -0.22639662062971103,
+            0.0004947347614955076,
+            -0.0026696188964068354,
+            0.2021441235807068
+        ]
+    ],
+    "images_used": [
+        "camera_calibration\\images\\calib_00.jpg",
+        "camera_calibration\\images\\calib_01.jpg",
+        "camera_calibration\\images\\calib_02.jpg",
+        "camera_calibration\\images\\calib_03.jpg",
+        "camera_calibration\\images\\calib_04.jpg",
+        "camera_calibration\\images\\calib_05.jpg",
+        "camera_calibration\\images\\calib_06.jpg",
+        "camera_calibration\\images\\calib_07.jpg",
+        "camera_calibration\\images\\calib_08.jpg",
+        "camera_calibration\\images\\calib_09.jpg",
+        "camera_calibration\\images\\calib_10.jpg",
+        "camera_calibration\\images\\calib_11.jpg",
+        "camera_calibration\\images\\calib_12.jpg",
+        "camera_calibration\\images\\calib_13.jpg",
+        "camera_calibration\\images\\calib_14.jpg",
+        "camera_calibration\\images\\calib_15.jpg",
+        "camera_calibration\\images\\calib_16.jpg",
+        "camera_calibration\\images\\calib_17.jpg",
+        "camera_calibration\\images\\calib_18.jpg",
+        "camera_calibration\\images\\calib_19.jpg"
+    ]
+}
