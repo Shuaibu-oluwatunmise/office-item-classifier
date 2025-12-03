@@ -10,12 +10,17 @@ Stabilized with Per-Object Thresholds (RANSAC, Homography Inlier Check, and EMA 
 - Added BEST-OF-5 mechanism: When gated candidates appear, buffer 5 frames 
   and select the one with the maximum ORB keypoints as the final reference.
 - The 'c' key is no longer functional.
+
+*** MODULARITY UPDATE ***
+- Camera Parameters are now loaded from 'camera_calibration/camera_params.py'
 """
 
 import cv2
 import numpy as np
 from ultralytics import YOLO
 import time
+# 🟢 NEW IMPORT
+from camera_calibration.camera_params import CAMERA_MATRIX, DIST_COEFFS
 
 # ==============================================================================
 # 1. OBJECT CONFIGS (NOW WITH PER-OBJECT TRACKING TUNING)
@@ -45,22 +50,7 @@ OBJECT_CONFIGS = {
 # ==============================================================================
 
 # ==============================================================================
-# 🔴 CALIBRATION PARAMETERS
-# ==============================================================================
-CAMERA_MATRIX_CALIBRATED = np.array([
-    [888.0265172956999, 0.0, 639.4063135490871],
-    [0.0, 884.0984394681841, 354.6648324151391],
-    [0.0, 0.0, 1.0],
-], dtype=np.float32)
-
-DIST_COEFFS_FLAT = np.array([
-    0.09450041549652369, 
-    -0.22639662062971103, 
-    0.0004947347614955076, 
-    -0.0026696188964068354, 
-    0.2021441235807068
-], dtype=np.float32)
-DIST_COEFFS_CALIBRATED = DIST_COEFFS_FLAT.reshape(5, 1)
+# 🔴 CALIBRATION PARAMETERS SECTION REMOVED (NOW IMPORTED)
 # ==============================================================================
 
 
@@ -130,16 +120,16 @@ class MultiObjectPoseEstimator:
                 "rvec_smooth": None,
                 "tvec_smooth": None,
 
-                # 🟢 NEW: Multi-frame "Best Shot" buffer
+                # NEW: Multi-frame "Best Shot" buffer
                 "calib_buffer": [],
                 "calib_buffer_size": 5,  # Buffer 5 "good" candidate frames before locking
             }
 
-        # Camera parameters
-        self.camera_matrix = CAMERA_MATRIX_CALIBRATED
-        self.dist_coeffs = DIST_COEFFS_CALIBRATED
+        # 🟢 UPDATED: Using imported parameters
+        self.camera_matrix = CAMERA_MATRIX
+        self.dist_coeffs = DIST_COEFFS
 
-        print("✓ Loaded CALIBRATED camera parameters for PnP.")
+        print("✓ Loaded camera parameters from camera_params.py for PnP.")
 
         # ORB with more features
         self.orb = cv2.ORB_create(nfeatures=4000) # Bumped from 2000
@@ -538,7 +528,7 @@ class MultiObjectPoseEstimator:
         print("\n" + "="*60)
         print("YOLO DETECTION + HOMOGRAPHY + PnP TEST (MULTI-OBJECT)")
         print("STABILITY: RANSAC, Per-Object Thresholds, Per-Object EMA")
-        print("*** AUTOCALIBRATION: Gated + Multi-frame Best Shot ***")                
+        print("*** AUTOCALIBRATION: Gated + Multi-frame Best Shot ***") 
         print("="*60)
         print("\nControls:")
         print("  'r' - Reset ALL calibrations (Will recalibrate)")
@@ -700,7 +690,7 @@ def main():
     print("\n" + "="*60)
     print("SETUP")
     print("="*60)
-    print("✓ Using hardcoded camera calibration.")
+    print("✓ Using camera parameters from camera_calibration/camera_params.py.")
     print("✓ 3D object points are centered at [0, 0, 0].")
     
     # UPDATE THIS PATH TO YOUR TRAINED MODEL
